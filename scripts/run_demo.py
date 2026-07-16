@@ -16,7 +16,7 @@ from pathlib import Path
 import httpx
 
 API = "http://localhost:8000/api/v1"
-ADMIN = {"username": "admin@demo.local", "password": "DemoClients2026!"}
+ADMIN = {"username": "admin@example.com", "password": "DemoClients2026!"}
 DEMO_DOC = Path(__file__).resolve().parent.parent / "examples/demo-data/politique_ia_groupe.md"
 
 W = 74
@@ -63,16 +63,16 @@ def main() -> int:
     title("ÉTAPE 4", "RAG Studio — base de connaissances d'entreprise")
     project = client.get("/projects").raise_for_status().json()[0]
     print(f"  Projet : {project['name']}")
-    kb_response = client.post(
-        "/rag/knowledge-bases",
-        json={"name": "Politique IA Groupe", "project_id": project["id"],
-              "workspace_id": project["workspace_id"], "similarity_threshold": 0.2},
-    )
-    if kb_response.status_code == 409:
-        kb = next(k for k in client.get("/rag/knowledge-bases").json()
-                  if k["name"] == "Politique IA Groupe")
+    existing = [k for k in client.get("/rag/knowledge-bases").json()
+                if k["name"] == "Politique IA Groupe"]
+    if existing:
+        kb = existing[0]
     else:
-        kb = kb_response.raise_for_status().json()
+        kb = client.post(
+            "/rag/knowledge-bases",
+            json={"name": "Politique IA Groupe", "project_id": project["id"],
+                  "workspace_id": project["workspace_id"], "similarity_threshold": 0.2},
+        ).raise_for_status().json()
     print(f"  Knowledge base : {kb['id']}  (chunking: {kb['chunking_strategy']}, "
           f"embeddings: {kb['embedding_provider']}/{kb['embedding_model']})")
 

@@ -68,7 +68,8 @@ Available tools:
 
 Rules:
 - Use "final" with your complete answer in "input" when the task is done.
-- Never invent tool names. Validate your JSON.
+- Never invent tool names. Validate your JSON. Emit exactly ONE JSON object per step.
+- Never repeat a tool call you already made with the same or similar input.
 - Be efficient: every step costs money — finish as soon as the task is solved."""
 
 
@@ -161,7 +162,24 @@ class AgentOrchestrator:
                 )
                 break
         else:
-            result.output = result.output or "Stopped: maximum iterations reached."
+            # Iterations exhausted without a final answer — force one synthesis turn
+            # so the caller always receives a usable conclusion.
+            messages.append(
+                ChatMessage(
+                    role=MessageRole.USER,
+                    content="You have used all your steps. Based on everything gathered "
+                    "above, give your final answer now as plain text (no JSON, no tools). "
+                    "Answer in the language of the original task.",
+                )
+            )
+            response = await self._gateway.chat(
+                ChatRequest(messages=list(messages), model="", temperature=0.1),
+                route, user_id=user_id, project_id=project_id, feature="agent",
+            )
+            result.prompt_tokens += response.usage.prompt_tokens
+            result.completion_tokens += response.usage.completion_tokens
+            result.output = response.content.strip() or "Stopped: maximum iterations reached."
+            steps.append(AgentStep(iterations + 1, "", "forced_final", result.output[:500]))
 
         if spec.reflection and result.output and not result.output.startswith("Stopped:"):
             result = await self._reflect(spec, task, result, route, user_id, project_id)
@@ -205,18 +223,23 @@ class AgentOrchestrator:
 
 
 def _parse_step(content: str) -> dict:
-    """Extract the JSON step object; tolerate markdown fences and prose around it."""
+    """Extract the first valid JSON step object.
+
+    Tolerates markdown fences, surrounding prose, and models that emit several
+    JSON objects in one turn (only the first actionable one counts).
+    """
     text = content.strip()
     if text.startswith("```"):
         text = text.strip("`")
         text = text.removeprefix("json").strip()
-    try:
-        return json.loads(text)
-    except json.JSONDecodeError:
-        start, end = text.find("{"), text.rfind("}")
-        if 0 <= start < end:
-            try:
-                return json.loads(text[start : end + 1])
-            except json.JSONDecodeError:
-                pass
+    decoder = json.JSONDecoder()
+    start = text.find("{")
+    while start != -1:
+        try:
+            candidate, _ = decoder.raw_decode(text[start:])
+        except json.JSONDecodeError:
+            candidate = None
+        if isinstance(candidate, dict) and "action" in candidate:
+            return candidate
+        start = text.find("{", start + 1)
     return {"thought": "", "action": "final", "input": content}

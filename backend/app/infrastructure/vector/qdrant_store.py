@@ -50,15 +50,26 @@ class QdrantVectorStore(VectorStorePort):
                     for key, value in filters.items()
                 ]
             )
-        results = await self._client.search(
-            collection_name=collection,
-            query_vector=query_vector,
-            limit=top_k,
-            score_threshold=score_threshold or None,
-            query_filter=query_filter,
-            with_payload=True,
-        )
-        return [VectorHit(id=str(p.id), score=p.score, payload=p.payload or {}) for p in results]
+        if hasattr(self._client, "query_points"):  # qdrant-client >= 1.10
+            response = await self._client.query_points(
+                collection_name=collection,
+                query=query_vector,
+                limit=top_k,
+                score_threshold=score_threshold or None,
+                query_filter=query_filter,
+                with_payload=True,
+            )
+            points = response.points
+        else:  # legacy API (qdrant-client 1.9)
+            points = await self._client.search(
+                collection_name=collection,
+                query_vector=query_vector,
+                limit=top_k,
+                score_threshold=score_threshold or None,
+                query_filter=query_filter,
+                with_payload=True,
+            )
+        return [VectorHit(id=str(p.id), score=p.score, payload=p.payload or {}) for p in points]
 
     async def delete_by_filter(self, collection: str, filters: dict[str, Any]) -> None:
         from qdrant_client.models import FieldCondition, Filter, FilterSelector, MatchValue

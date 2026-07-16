@@ -20,7 +20,7 @@ from app.api.v1.schemas import (
     RAGQueryResponse,
     UsageResponse,
 )
-from app.core.exceptions import ValidationError
+from app.core.exceptions import ConflictError, ValidationError
 from app.domain.entities.identity import Role
 from app.domain.services.routing import estimate_cost_usd
 from app.infrastructure.database.models import (
@@ -55,7 +55,10 @@ def _rag_service(session) -> RAGService:
 async def create_knowledge_base(
     body: KnowledgeBaseCreate, session: DbSession, actor: CurrentUser, settings: AppSettings
 ) -> KnowledgeBaseResponse:
-    kb = await KnowledgeBaseRepository(session).add(
+    repo = KnowledgeBaseRepository(session)
+    if await repo.list(project_id=body.project_id, name=body.name):
+        raise ConflictError(f"Knowledge base '{body.name}' already exists in this project")
+    kb = await repo.add(
         KnowledgeBaseModel(
             **body.model_dump(),
             embedding_provider=settings.default_embedding_provider,

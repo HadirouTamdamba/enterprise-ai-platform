@@ -30,7 +30,8 @@ Answer the user's question using ONLY the numbered context passages below.
 Rules:
 - Cite passages inline as [1], [2] matching the passage numbers you used.
 - If the context does not contain the answer, say so explicitly — never invent facts.
-- Be concise and factual. Answer in the language of the question.
+- Be concise and factual.
+- Answer STRICTLY in the same language as the question (French question -> French answer).
 
 Context passages:
 {context}"""
