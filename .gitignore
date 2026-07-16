@@ -49,3 +49,8 @@ mlruns/
 # Logs
 logs/
 *.log
+
+# Client-facing sales assets — never public (kept in ../EAP-demo-kit)
+docs/demo-script.md
+docs/presentation/
+*.pptx
