@@ -94,6 +94,11 @@ class AgentOrchestrator:
         iterations = min(max_iterations or spec.max_iterations, 20)
         budget = min(max_cost_usd or spec.max_cost_usd, 50.0)
 
+        if not spec.tools:
+            # No tools → the plan/act JSON protocol is pure overhead (and small
+            # models leak it into their answers). Answer directly in one call.
+            return await self._direct_answer(spec, task, user_id=user_id, project_id=project_id)
+
         tool_index = {tool.name: tool for tool in spec.tools}
         tools_doc = "\n".join(
             f"- {t.name}: {t.description} — parameters: {json.dumps(t.parameters)}"
@@ -131,7 +136,10 @@ class AgentOrchestrator:
 
             step_data = _parse_step(response.content)
             thought = step_data.get("thought", "")
-            action = step_data.get("action", "final")
+            action = str(step_data.get("action", "final")).strip().lower()
+            # Small models express "no tool needed" in many ways — all mean final.
+            if action in ("", "none", "null", "no_action", "answer", "respond", "done"):
+                action = "final"
 
             if action != "final" and action not in tool_index:
                 # Unknown action → correct the model and let it retry within budget.
@@ -197,13 +205,61 @@ class AgentOrchestrator:
             )
             result.prompt_tokens += response.usage.prompt_tokens
             result.completion_tokens += response.usage.completion_tokens
-            result.output = response.content.strip() or "Stopped: maximum iterations reached."
+            # The model may still answer in protocol JSON — unwrap it for the user.
+            final_data = _parse_step(response.content)
+            unwrapped = final_data.get("input") or final_data.get("thought") or response.content
+            result.output = (
+                unwrapped if isinstance(unwrapped, str) else json.dumps(unwrapped, indent=2)
+            ).strip() or "Stopped: maximum iterations reached."
             steps.append(AgentStep(iterations + 1, "", "forced_final", result.output[:500]))
 
         if spec.reflection and result.output and not result.output.startswith("Stopped:"):
             result = await self._reflect(spec, task, result, route, user_id, project_id)
 
         AGENT_RUNS.labels(spec.name, "success" if result.output else "failure").inc()
+        return result
+
+    async def _direct_answer(
+        self,
+        spec: AgentSpec,
+        task: str,
+        *,
+        user_id: UUID | None,
+        project_id: UUID | None,
+    ) -> AgentResult:
+        """Single-call path for tool-less agents: plain prose in, plain prose out."""
+        route = self._gateway.resolve(provider=None, model=None)
+        request = ChatRequest(
+            messages=[
+                ChatMessage(
+                    role=MessageRole.SYSTEM,
+                    content=spec.system_prompt
+                    + "\nAnswer directly, in the same language as the task.",
+                ),
+                ChatMessage(role=MessageRole.USER, content=task),
+            ],
+            model="",
+            temperature=0.2,
+        )
+        response = await self._gateway.chat(
+            request, route, user_id=user_id, project_id=project_id, feature="agent"
+        )
+        output = response.content.strip()
+        result = AgentResult(
+            agent=spec.name,
+            output=output,
+            steps=[AgentStep(1, "", "final", output[:500])],
+            prompt_tokens=response.usage.prompt_tokens,
+            completion_tokens=response.usage.completion_tokens,
+            latency_ms=response.latency_ms,
+            cost_usd=estimate_cost_usd(
+                response.usage.prompt_tokens,
+                response.usage.completion_tokens,
+                self._gateway._pricing,
+                response.model,
+            ),
+        )
+        AGENT_RUNS.labels(spec.name, "success" if output else "failure").inc()
         return result
 
     async def _reflect(
