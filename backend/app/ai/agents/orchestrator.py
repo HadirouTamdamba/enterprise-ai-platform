@@ -121,7 +121,7 @@ class AgentOrchestrator:
             result.cost_usd += estimate_cost_usd(
                 response.usage.prompt_tokens,
                 response.usage.completion_tokens,
-                self._gateway._pricing,  # noqa: SLF001 — gateway owns pricing
+                self._gateway._pricing,
                 response.model,
             )
 
@@ -129,7 +129,7 @@ class AgentOrchestrator:
             thought = step_data.get("thought", "")
             action = step_data.get("action", "final")
 
-            if action == "final" or action not in tool_index and action != "final":
+            if action == "final" or (action not in tool_index and action != "final"):
                 if action != "final" and action not in tool_index:
                     # Unknown tool → treat model output as the final answer, flagged.
                     logger.warning("agent_unknown_tool", agent=spec.name, action=action)

@@ -2,12 +2,12 @@
 
 from fastapi import APIRouter, Depends
 
-from app.api.deps import CurrentUser, DbSession, enforce_rate_limit, require_role
-from app.api.v1.schemas import AgentRunRequest, AgentRunResponse, AgentStepResponse, UsageResponse
 from app.ai.agents.catalog import build_agent, list_agents
 from app.ai.agents.orchestrator import AgentOrchestrator, AgentTool
 from app.ai.gateway.service import LLMGatewayService
 from app.ai.rag.service import RAGService
+from app.api.deps import CurrentUser, DbSession, enforce_rate_limit, require_role
+from app.api.v1.schemas import AgentRunRequest, AgentRunResponse, AgentStepResponse, UsageResponse
 from app.core.exceptions import NotFoundError
 from app.domain.entities.identity import Role
 from app.infrastructure.database.repositories.ai import (

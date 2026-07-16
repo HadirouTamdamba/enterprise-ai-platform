@@ -43,7 +43,7 @@ test-frontend: ## Run frontend tests
 	cd frontend && npm test
 
 evaluate: ## Run AI evaluation suites (RAG, prompts, agents)
-	cd backend && .venv/bin/python -m evaluation.run_all
+	cd backend && PYTHONPATH=.. .venv/bin/python -m evaluation.run_all
 
 lint: ## Lint & type-check everything
 	cd backend && .venv/bin/ruff check app && .venv/bin/mypy app

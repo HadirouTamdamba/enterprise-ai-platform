@@ -4,23 +4,25 @@ from datetime import UTC, datetime, timedelta
 from typing import Any, Literal
 from uuid import UUID
 
+import bcrypt
 from jose import JWTError, jwt
-from passlib.context import CryptContext
 
 from app.core.config import get_settings
 from app.core.exceptions import AuthenticationError
-
-_pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 TokenType = Literal["access", "refresh"]
 
 
 def hash_password(password: str) -> str:
-    return _pwd_context.hash(password)
+    # bcrypt operates on at most 72 bytes; longer input is truncated explicitly.
+    return bcrypt.hashpw(password.encode()[:72], bcrypt.gensalt(rounds=12)).decode()
 
 
 def verify_password(plain: str, hashed: str) -> bool:
-    return _pwd_context.verify(plain, hashed)
+    try:
+        return bcrypt.checkpw(plain.encode()[:72], hashed.encode())
+    except ValueError:
+        return False
 
 
 def create_token(subject: UUID | str, token_type: TokenType, *, role: str = "") -> str:

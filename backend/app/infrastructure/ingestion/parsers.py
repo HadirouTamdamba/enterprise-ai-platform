@@ -1,7 +1,6 @@
 """Document parsers for enterprise formats (F-21). Each returns (page, text) tuples."""
 
 import csv
-import io
 import json
 from pathlib import Path
 
@@ -131,7 +130,7 @@ def _parse_image_ocr(path: Path) -> list[PageText]:
 def _ocr_pdf_page(path: Path, page_number: int) -> str:
     """Best-effort OCR for scanned PDF pages; returns empty text when OCR is not installed."""
     try:
-        import pytesseract  # noqa: F401
+        import pytesseract
     except ImportError:
         return ""
     # Rendering PDFs to images requires poppler/pdf2image; documented in the ocr extra.

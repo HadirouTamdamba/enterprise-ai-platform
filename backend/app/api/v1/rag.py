@@ -1,12 +1,14 @@
 """RAG Studio endpoints (F-20..F-29): knowledge bases, documents, queries, feedback."""
 
-import shutil
 import uuid as uuidlib
 from pathlib import Path
 from uuid import UUID
 
 from fastapi import APIRouter, UploadFile
 
+from app.ai.gateway.pricing import get_pricing
+from app.ai.gateway.service import LLMGatewayService
+from app.ai.rag.service import RAGService
 from app.api.deps import AppSettings, CurrentUser, DbSession, require_role
 from app.api.v1.schemas import (
     CitationResponse,
@@ -18,9 +20,6 @@ from app.api.v1.schemas import (
     RAGQueryResponse,
     UsageResponse,
 )
-from app.ai.gateway.pricing import get_pricing
-from app.ai.gateway.service import LLMGatewayService
-from app.ai.rag.service import RAGService
 from app.core.exceptions import ValidationError
 from app.domain.entities.identity import Role
 from app.domain.services.routing import estimate_cost_usd

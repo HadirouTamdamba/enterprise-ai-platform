@@ -32,7 +32,8 @@ def get_engine() -> AsyncEngine:
 
 def get_session_factory() -> async_sessionmaker[AsyncSession]:
     get_engine()
-    assert _session_factory is not None
+    if _session_factory is None:  # pragma: no cover — get_engine always initializes it
+        raise RuntimeError("Database session factory is not initialized")
     return _session_factory
 
 

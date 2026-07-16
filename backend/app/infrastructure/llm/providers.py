@@ -12,7 +12,6 @@ from typing import Any
 
 import httpx
 
-from app.core.config import get_settings
 from app.core.exceptions import ModelInferenceError, ProviderUnavailableError
 from app.domain.ports.llm import (
     ChatRequest,
@@ -101,26 +100,25 @@ class AnthropicProvider(LLMProviderPort):
 
     async def chat_stream(self, request: ChatRequest) -> AsyncIterator[StreamChunk]:
         payload = self._payload(request) | {"stream": True}
-        async with httpx.AsyncClient(timeout=_TIMEOUT) as client:
-            async with client.stream(
-                "POST",
-                f"{self._base_url}/v1/messages",
-                headers={
-                    "x-api-key": self._api_key,
-                    "anthropic-version": "2023-06-01",
-                    "content-type": "application/json",
-                },
-                json=payload,
-            ) as response:
-                _raise_for_status(response, self.name)
-                async for line in response.aiter_lines():
-                    if not line.startswith("data: "):
-                        continue
-                    event = json.loads(line[6:])
-                    if event.get("type") == "content_block_delta":
-                        yield StreamChunk(delta=event["delta"].get("text", ""))
-                    elif event.get("type") == "message_stop":
-                        yield StreamChunk(delta="", finish_reason="stop")
+        async with httpx.AsyncClient(timeout=_TIMEOUT) as client, client.stream(
+            "POST",
+            f"{self._base_url}/v1/messages",
+            headers={
+                "x-api-key": self._api_key,
+                "anthropic-version": "2023-06-01",
+                "content-type": "application/json",
+            },
+            json=payload,
+        ) as response:
+            _raise_for_status(response, self.name)
+            async for line in response.aiter_lines():
+                if not line.startswith("data: "):
+                    continue
+                event = json.loads(line[6:])
+                if event.get("type") == "content_block_delta":
+                    yield StreamChunk(delta=event["delta"].get("text", ""))
+                elif event.get("type") == "message_stop":
+                    yield StreamChunk(delta="", finish_reason="stop")
 
 
 class OpenAICompatibleProvider(LLMProviderPort):
@@ -217,21 +215,20 @@ class OpenAICompatibleProvider(LLMProviderPort):
 
     async def chat_stream(self, request: ChatRequest) -> AsyncIterator[StreamChunk]:
         payload = self._payload(request) | {"stream": True}
-        async with httpx.AsyncClient(timeout=_TIMEOUT) as client:
-            async with client.stream(
-                "POST",
-                f"{self._base_url}/chat/completions",
-                headers=self._headers(),
-                json=payload,
-            ) as response:
-                _raise_for_status(response, self.name)
-                async for line in response.aiter_lines():
-                    if not line.startswith("data: ") or line.strip() == "data: [DONE]":
-                        continue
-                    event = json.loads(line[6:])
-                    delta = event["choices"][0].get("delta", {}).get("content", "")
-                    finish = event["choices"][0].get("finish_reason")
-                    yield StreamChunk(delta=delta or "", finish_reason=finish)
+        async with httpx.AsyncClient(timeout=_TIMEOUT) as client, client.stream(
+            "POST",
+            f"{self._base_url}/chat/completions",
+            headers=self._headers(),
+            json=payload,
+        ) as response:
+            _raise_for_status(response, self.name)
+            async for line in response.aiter_lines():
+                if not line.startswith("data: ") or line.strip() == "data: [DONE]":
+                    continue
+                event = json.loads(line[6:])
+                delta = event["choices"][0].get("delta", {}).get("content", "")
+                finish = event["choices"][0].get("finish_reason")
+                yield StreamChunk(delta=delta or "", finish_reason=finish)
 
 
 class GeminiProvider(LLMProviderPort):
@@ -314,7 +311,9 @@ class FakeProvider(LLMProviderPort):
             content=self._canned,
             model=request.model,
             provider=self.name,
-            usage=UsageInfo(prompt_tokens=prompt_tokens, completion_tokens=len(self._canned.split())),
+            usage=UsageInfo(
+                prompt_tokens=prompt_tokens, completion_tokens=len(self._canned.split())
+            ),
             latency_ms=1.0,
         )
 

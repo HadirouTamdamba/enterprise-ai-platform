@@ -24,12 +24,16 @@ _INJECTION_PATTERNS = [
 _INJECTION_RE = re.compile("|".join(_INJECTION_PATTERNS), re.IGNORECASE)
 
 # --- PII --------------------------------------------------------------------
+# Order matters: specific identifiers (IBAN, card, SSN) run before the generic
+# phone pattern, which would otherwise consume their digit sequences.
 _PII_PATTERNS: dict[str, re.Pattern[str]] = {
     "email": re.compile(r"\b[\w.+-]+@[\w-]+\.[\w.]{2,}\b"),
-    "phone": re.compile(r"\b(?:\+?\d{1,3}[ .-]?)?(?:\(\d{1,4}\)[ .-]?)?\d{2,4}([ .-]?\d{2,4}){2,4}\b"),
     "iban": re.compile(r"\b[A-Z]{2}\d{2}[ ]?(?:[A-Z0-9]{4}[ ]?){2,7}[A-Z0-9]{1,4}\b"),
     "credit_card": re.compile(r"\b(?:\d[ -]?){13,16}\b"),
     "ssn_fr": re.compile(r"\b[12]\s?\d{2}\s?\d{2}\s?\d{2}\s?\d{3}\s?\d{3}\b"),
+    "phone": re.compile(
+        r"\b(?:\+?\d{1,3}[ .-]?)?(?:\(\d{1,4}\)[ .-]?)?\d{2,4}([ .-]?\d{2,4}){2,4}\b"
+    ),
 }
 
 # --- Toxicity (minimal deterministic list; extend per deployment locale) -----
@@ -65,7 +69,9 @@ def check_toxicity(text: str) -> bool:
     return any(term in lowered for term in _TOXIC_TERMS)
 
 
-def validate_input(text: str, *, redact: bool = True, raise_on_block: bool = True) -> GuardrailReport:
+def validate_input(
+    text: str, *, redact: bool = True, raise_on_block: bool = True
+) -> GuardrailReport:
     """Run input guardrails: injection → toxicity → PII redaction."""
     report = GuardrailReport(redacted_text=text)
     if check_prompt_injection(text):
@@ -108,7 +114,7 @@ def groundedness_score(answer: str, contexts: list[str]) -> float:
     A fast, deterministic hallucination signal (0..1). Evaluation suites add an
     LLM-judge for semantic faithfulness; this guard runs on every RAG answer.
     """
-    answer_tokens = {t for t in re.findall(r"[a-zA-ZÀ-ÿ0-9]{4,}", answer.lower())}
+    answer_tokens = set(re.findall(r"[a-zA-ZÀ-ÿ0-9]{4,}", answer.lower()))
     if not answer_tokens:
         return 1.0
     context_text = " ".join(contexts).lower()

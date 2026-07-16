@@ -135,10 +135,7 @@ class RAGService:
             score_threshold=kb.similarity_threshold,
             filters=combined_filters,
         )
-        if kb.rerank_enabled and hits:
-            hits = self._rerank(question, hits)[:k]
-        else:
-            hits = hits[:k]
+        hits = self._rerank(question, hits)[:k] if kb.rerank_enabled and hits else hits[:k]
         RAG_RETRIEVED_CHUNKS.observe(len(hits))
         return hits
 
@@ -149,7 +146,7 @@ class RAGService:
         Deterministic and dependency-free; a cross-encoder adapter can replace
         this without changing callers.
         """
-        keywords = {t for t in re.findall(r"[a-zA-ZÀ-ÿ0-9]{3,}", question.lower())}
+        keywords = set(re.findall(r"[a-zA-ZÀ-ÿ0-9]{3,}", question.lower()))
 
         def blended(hit: VectorHit) -> float:
             content = str(hit.payload.get("content", "")).lower()

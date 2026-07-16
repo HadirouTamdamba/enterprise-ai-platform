@@ -75,9 +75,15 @@ def get_embedding_provider(name: str | None = None) -> EmbeddingProviderPort:
     s = get_settings()
     name = name or s.default_embedding_provider
     candidates: dict[str, EmbeddingProviderPort] = {
-        "openai": OpenAICompatibleEmbeddings("openai", s.openai_api_key, "https://api.openai.com/v1"),
-        "mistral": OpenAICompatibleEmbeddings("mistral", s.mistral_api_key, "https://api.mistral.ai/v1"),
-        "ollama": OpenAICompatibleEmbeddings("ollama", "", f"{s.ollama_base_url}/v1", requires_key=False),
+        "openai": OpenAICompatibleEmbeddings(
+            "openai", s.openai_api_key, "https://api.openai.com/v1"
+        ),
+        "mistral": OpenAICompatibleEmbeddings(
+            "mistral", s.mistral_api_key, "https://api.mistral.ai/v1"
+        ),
+        "ollama": OpenAICompatibleEmbeddings(
+            "ollama", "", f"{s.ollama_base_url}/v1", requires_key=False
+        ),
         "local": LocalHashEmbeddings(s.embedding_dimension),
     }
     provider = candidates.get(name)

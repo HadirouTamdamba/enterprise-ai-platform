@@ -60,7 +60,9 @@ def get_provider_registry() -> ProviderRegistry:
         "azure_openai": OpenAICompatibleProvider(
             "azure_openai",
             s.azure_openai_api_key,
-            f"{s.azure_openai_endpoint.rstrip('/')}/openai/deployments" if s.azure_openai_endpoint else "",
+            f"{s.azure_openai_endpoint.rstrip('/')}/openai/deployments"
+            if s.azure_openai_endpoint
+            else "",
             extra_headers={"api-key": s.azure_openai_api_key} if s.azure_openai_api_key else None,
         ),
         # Bedrock & Vertex expose OpenAI-compatible endpoints via their gateways;

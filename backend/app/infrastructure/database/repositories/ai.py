@@ -138,7 +138,12 @@ class UsageRepository(BaseRepository[UsageRecordModel]):
             stmt = stmt.where(UsageRecordModel.created_at >= since)
         rows = (await self.session.execute(stmt)).all()
         return [
-            {"provider": r[0], "model": r[1], "requests": int(r[2]), "cost_usd": round(float(r[3]), 6)}
+            {
+                "provider": r[0],
+                "model": r[1],
+                "requests": int(r[2]),
+                "cost_usd": round(float(r[3]), 6),
+            }
             for r in rows
         ]
 
