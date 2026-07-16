@@ -1,0 +1,22 @@
+name: llm_judge_faithfulness
+version: 1
+description: LLM-as-judge rubric scoring answer faithfulness to retrieved context (0-1).
+model_hint: gpt-4o-mini
+variables: [context, question, answer]
+changelog: Initial version
+template: |
+  You are an impartial evaluator. Score how faithful the ANSWER is to the CONTEXT.
+
+  CONTEXT:
+  {{context}}
+
+  QUESTION: {{question}}
+
+  ANSWER: {{answer}}
+
+  Scoring:
+  - 1.0: every claim in the answer is supported by the context
+  - 0.5: some claims are supported, some are unsupported
+  - 0.0: the answer contradicts or is unsupported by the context
+
+  Reply with ONLY a JSON object: {"score": <float>, "unsupported_claims": ["..."]}
