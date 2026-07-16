@@ -1,0 +1,57 @@
+{
+  "title": "AI Operations",
+  "uid": "eap-ai-ops",
+  "schemaVersion": 39,
+  "refresh": "30s",
+  "time": { "from": "now-6h", "to": "now" },
+  "panels": [
+    {
+      "id": 1, "type": "timeseries", "title": "LLM requests / min by provider",
+      "gridPos": { "x": 0, "y": 0, "w": 12, "h": 8 },
+      "targets": [{ "expr": "sum(rate(eap_llm_requests_total[5m])) by (provider) * 60" }]
+    },
+    {
+      "id": 2, "type": "timeseries", "title": "LLM cost (USD/hour) by model",
+      "gridPos": { "x": 12, "y": 0, "w": 12, "h": 8 },
+      "targets": [{ "expr": "sum(rate(eap_llm_cost_usd_total[5m])) by (model) * 3600" }]
+    },
+    {
+      "id": 3, "type": "timeseries", "title": "LLM P95 latency by provider",
+      "gridPos": { "x": 0, "y": 8, "w": 12, "h": 8 },
+      "targets": [{ "expr": "histogram_quantile(0.95, sum(rate(eap_llm_latency_seconds_bucket[5m])) by (le, provider))" }]
+    },
+    {
+      "id": 4, "type": "timeseries", "title": "Tokens / min (in vs out)",
+      "gridPos": { "x": 12, "y": 8, "w": 12, "h": 8 },
+      "targets": [{ "expr": "sum(rate(eap_llm_tokens_total[5m])) by (direction) * 60" }]
+    },
+    {
+      "id": 5, "type": "timeseries", "title": "HTTP error rate (5xx %)",
+      "gridPos": { "x": 0, "y": 16, "w": 8, "h": 8 },
+      "targets": [{ "expr": "100 * sum(rate(eap_http_requests_total{status=~\"5..\"}[5m])) / sum(rate(eap_http_requests_total[5m]))" }]
+    },
+    {
+      "id": 6, "type": "timeseries", "title": "Guardrail blocks by type",
+      "gridPos": { "x": 8, "y": 16, "w": 8, "h": 8 },
+      "targets": [{ "expr": "sum(rate(eap_guardrail_blocks_total[5m])) by (guardrail) * 60" }]
+    },
+    {
+      "id": 7, "type": "stat", "title": "Cache hit rate",
+      "gridPos": { "x": 16, "y": 16, "w": 8, "h": 8 },
+      "targets": [{ "expr": "sum(rate(eap_llm_cache_hits_total[1h])) / (sum(rate(eap_llm_requests_total[1h])) + 0.0001)" }]
+    },
+    {
+      "id": 8, "type": "timeseries", "title": "RAG queries & retrieved chunks",
+      "gridPos": { "x": 0, "y": 24, "w": 12, "h": 8 },
+      "targets": [
+        { "expr": "sum(rate(eap_rag_queries_total[5m])) * 60", "legendFormat": "queries/min" },
+        { "expr": "histogram_quantile(0.5, sum(rate(eap_rag_retrieved_chunks_bucket[5m])) by (le))", "legendFormat": "median chunks" }
+      ]
+    },
+    {
+      "id": 9, "type": "timeseries", "title": "Agent runs by outcome",
+      "gridPos": { "x": 12, "y": 24, "w": 12, "h": 8 },
+      "targets": [{ "expr": "sum(rate(eap_agent_runs_total[15m])) by (agent, outcome) * 900" }]
+    }
+  ]
+}

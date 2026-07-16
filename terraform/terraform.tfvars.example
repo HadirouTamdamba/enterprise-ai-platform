@@ -1,0 +1,7 @@
+region      = "eu-west-1"
+environment = "staging"
+
+# Production sizing example:
+# environment         = "production"
+# node_instance_types = ["m6i.2xlarge"]
+# db_instance_class   = "db.r6g.xlarge"

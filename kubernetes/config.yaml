@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: eap-config
+  namespace: eap
+data:
+  ENVIRONMENT: production
+  POSTGRES_HOST: postgres
+  REDIS_HOST: redis
+  QDRANT_HOST: qdrant
+  CELERY_BROKER_URL: redis://redis:6379/1
+  CELERY_RESULT_BACKEND: redis://redis:6379/2
+  DEFAULT_LLM_PROVIDER: anthropic
+  DEFAULT_LLM_MODEL: claude-sonnet-5
+  FALLBACK_LLM_PROVIDER: openai
+  FALLBACK_LLM_MODEL: gpt-4o
+  PUBLIC_API_URL: https://ai-platform.example.com/api/v1
+---
+# TEMPLATE ONLY — create the real secret via your secret manager / external-secrets:
+#   kubectl create secret generic eap-secrets -n eap \
+#     --from-literal=SECRET_KEY=$(openssl rand -hex 32) \
+#     --from-literal=POSTGRES_USER=eap \
+#     --from-literal=POSTGRES_PASSWORD=... \
+#     --from-literal=POSTGRES_DB=eap \
+#     --from-literal=ANTHROPIC_API_KEY=...
+apiVersion: v1
+kind: Secret
+metadata:
+  name: eap-secrets-template
+  namespace: eap
+type: Opaque
+stringData:
+  SECRET_KEY: CHANGE-ME
+  POSTGRES_USER: eap
+  POSTGRES_PASSWORD: CHANGE-ME
+  POSTGRES_DB: eap
+  ANTHROPIC_API_KEY: ""
+  OPENAI_API_KEY: ""

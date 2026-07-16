@@ -1,0 +1,7 @@
+apiVersion: 1
+providers:
+  - name: EAP
+    folder: Enterprise AI Platform
+    type: file
+    options:
+      path: /var/lib/grafana/dashboards

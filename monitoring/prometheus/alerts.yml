@@ -1,0 +1,46 @@
+groups:
+  - name: platform
+    rules:
+      - alert: HighErrorRate
+        expr: sum(rate(eap_http_requests_total{status=~"5.."}[5m])) / sum(rate(eap_http_requests_total[5m])) > 0.05
+        for: 5m
+        labels: { severity: critical }
+        annotations:
+          summary: "HTTP 5xx error rate above 5% for 5 minutes"
+
+      - alert: HighApiLatency
+        expr: histogram_quantile(0.95, sum(rate(eap_http_request_duration_seconds_bucket[5m])) by (le)) > 2
+        for: 10m
+        labels: { severity: warning }
+        annotations:
+          summary: "P95 API latency above 2s"
+
+  - name: ai
+    rules:
+      - alert: LLMProviderFailures
+        expr: sum(rate(eap_llm_requests_total{outcome="error"}[10m])) > 0.5
+        for: 10m
+        labels: { severity: warning }
+        annotations:
+          summary: "LLM provider failures detected — check fallback chain and provider status"
+
+      - alert: LLMCostSpike
+        expr: sum(increase(eap_llm_cost_usd_total[1h])) > 50
+        for: 5m
+        labels: { severity: warning }
+        annotations:
+          summary: "LLM spend above $50 in the last hour — investigate usage"
+
+      - alert: GuardrailBlocksSpike
+        expr: sum(increase(eap_guardrail_blocks_total{guardrail="prompt_injection"}[15m])) > 20
+        for: 5m
+        labels: { severity: warning }
+        annotations:
+          summary: "Prompt-injection attempts spiking — possible attack in progress"
+
+      - alert: IngestionFailures
+        expr: increase(eap_documents_indexed_total{status="failed"}[30m]) > 5
+        for: 5m
+        labels: { severity: warning }
+        annotations:
+          summary: "Multiple document ingestion failures in the last 30 minutes"
