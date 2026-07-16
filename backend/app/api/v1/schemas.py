@@ -266,6 +266,9 @@ class AgentRunRequest(BaseModel):
     knowledge_base_id: UUID | None = None
     max_iterations: int = Field(default=6, ge=1, le=20)
     max_cost_usd: float = Field(default=1.0, gt=0, le=50)
+    # Reflection adds a quality pass but doubles latency — off by default so
+    # interactive runs on local models stay responsive.
+    reflection: bool = False
 
 
 class AgentStepResponse(BaseModel):

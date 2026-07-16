@@ -67,6 +67,7 @@ async def run_agent(
         spec = build_agent(body.agent, tools)
     except KeyError as exc:
         raise NotFoundError(str(exc)) from exc
+    spec.reflection = spec.reflection and body.reflection
 
     orchestrator = AgentOrchestrator(gateway)
     result = await orchestrator.run(

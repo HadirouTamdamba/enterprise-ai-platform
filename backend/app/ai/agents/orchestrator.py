@@ -135,7 +135,11 @@ class AgentOrchestrator:
                     # Unknown tool → treat model output as the final answer, flagged.
                     logger.warning("agent_unknown_tool", agent=spec.name, action=action)
                 output = step_data.get("input", response.content)
-                result.output = output if isinstance(output, str) else json.dumps(output)
+                result.output = (
+                    output
+                    if isinstance(output, str)
+                    else json.dumps(output, indent=2, ensure_ascii=False)
+                )
                 steps.append(AgentStep(iteration, thought, "final", result.output[:500]))
                 break
 

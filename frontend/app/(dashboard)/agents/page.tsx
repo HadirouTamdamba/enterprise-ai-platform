@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import { Badge, Button, Card, Textarea } from "@/components/ui";
@@ -21,7 +21,9 @@ interface AgentRun {
 export default function AgentsPage() {
   const [selected, setSelected] = useState("planner");
   const [task, setTask] = useState("");
+  const [reflection, setReflection] = useState(false);
   const [run, setRun] = useState<AgentRun | null>(null);
+  const [elapsed, setElapsed] = useState(0);
 
   const agents = useQuery({ queryKey: ["agents"], queryFn: () => api<AgentInfo[]>("/agents") });
 
@@ -29,10 +31,17 @@ export default function AgentsPage() {
     mutationFn: () =>
       api<AgentRun>("/agents/run", {
         method: "POST",
-        body: JSON.stringify({ agent: selected, task }),
+        body: JSON.stringify({ agent: selected, task, reflection, max_iterations: 4 }),
       }),
     onSuccess: setRun,
   });
+
+  useEffect(() => {
+    if (!execute.isPending) return;
+    setElapsed(0);
+    const timer = setInterval(() => setElapsed((s) => s + 1), 1000);
+    return () => clearInterval(timer);
+  }, [execute.isPending]);
 
   return (
     <div className="space-y-6">
@@ -71,9 +80,23 @@ export default function AgentsPage() {
               onChange={(e) => setTask(e.target.value)}
               placeholder={`Give the ${selected} agent a task…`}
             />
+            <label className="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
+              <input
+                type="checkbox"
+                checked={reflection}
+                onChange={(e) => setReflection(e.target.checked)}
+              />
+              Reflection pass (higher quality, ~2× slower)
+            </label>
             <Button onClick={() => execute.mutate()} disabled={task.length < 3 || execute.isPending}>
-              {execute.isPending ? "Agent working…" : `Run ${selected}`}
+              {execute.isPending ? `Agent working… ${elapsed}s` : `Run ${selected}`}
             </Button>
+            {execute.isPending && (
+              <p className="text-xs text-zinc-500">
+                Local models (Ollama) take 30s–3min per run — the full execution trace
+                appears when the agent finishes.
+              </p>
+            )}
             {execute.isError && (
               <p className="text-sm text-red-600">{(execute.error as Error).message}</p>
             )}
