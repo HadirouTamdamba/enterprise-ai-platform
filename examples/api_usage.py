@@ -5,12 +5,31 @@ Requires the Docker Compose stack (make up) and httpx: pip install httpx
 """
 
 import io
+import os
 import sys
+from pathlib import Path
 
 import httpx
 
 API = "http://localhost:8000/api/v1"
-ADMIN = {"username": "admin@example.com", "password": "ChangeMe123!"}
+
+
+def _credentials() -> dict[str, str]:
+    """ADMIN_EMAIL / ADMIN_PASSWORD from the environment, falling back to ../.env."""
+    email = os.getenv("ADMIN_EMAIL", "")
+    password = os.getenv("ADMIN_PASSWORD", "")
+    env_file = Path(__file__).resolve().parent.parent / ".env"
+    if env_file.exists():
+        for line in env_file.read_text().splitlines():
+            key, _, value = line.strip().partition("=")
+            if key == "ADMIN_EMAIL" and not email:
+                email = value
+            if key == "ADMIN_PASSWORD" and not password:
+                password = value
+    return {"username": email or "admin@example.com", "password": password or "ChangeMe123!"}
+
+
+ADMIN = _credentials()
 
 
 def main() -> int:

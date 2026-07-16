@@ -9,15 +9,35 @@ Usage:  python scripts/run_demo.py
         (stack démarrée via `docker compose up -d`, httpx installé)
 """
 
+import os
 import sys
 import time
 from pathlib import Path
 
 import httpx
 
+REPO_ROOT = Path(__file__).resolve().parent.parent
 API = "http://localhost:8000/api/v1"
-ADMIN = {"username": "admin@example.com", "password": "DemoClients2026!"}
-DEMO_DOC = Path(__file__).resolve().parent.parent / "examples/demo-data/politique_ia_groupe.md"
+DEMO_DOC = REPO_ROOT / "examples/demo-data/politique_ia_groupe.md"
+
+
+def _load_env_credentials() -> dict[str, str]:
+    """Read ADMIN_EMAIL / ADMIN_PASSWORD from the environment, falling back to .env."""
+    values = {"ADMIN_EMAIL": os.getenv("ADMIN_EMAIL", ""),
+              "ADMIN_PASSWORD": os.getenv("ADMIN_PASSWORD", "")}
+    env_file = REPO_ROOT / ".env"
+    if env_file.exists():
+        for line in env_file.read_text().splitlines():
+            key, _, value = line.strip().partition("=")
+            if key in values and not values[key]:
+                values[key] = value
+    return {
+        "username": values["ADMIN_EMAIL"] or "admin@example.com",
+        "password": values["ADMIN_PASSWORD"] or "ChangeMe123!",
+    }
+
+
+ADMIN = _load_env_credentials()
 
 W = 74
 
