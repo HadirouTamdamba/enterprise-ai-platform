@@ -54,8 +54,15 @@ export async function api<T>(
   };
   const res = await fetch(`${API_URL}${path}`, { ...options, headers });
 
-  if (res.status === 401 && !retried && (await tryRefresh())) {
-    return api<T>(path, options, true);
+  if (res.status === 401 && !retried) {
+    if (await tryRefresh()) {
+      return api<T>(path, options, true);
+    }
+    // Session is no longer recoverable — send the user back to login.
+    clearTokens();
+    if (typeof window !== "undefined" && !window.location.pathname.startsWith("/login")) {
+      window.location.href = "/login";
+    }
   }
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));

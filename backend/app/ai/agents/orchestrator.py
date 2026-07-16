@@ -130,11 +130,23 @@ class AgentOrchestrator:
             thought = step_data.get("thought", "")
             action = step_data.get("action", "final")
 
-            if action == "final" or (action not in tool_index and action != "final"):
-                if action != "final" and action not in tool_index:
-                    # Unknown tool → treat model output as the final answer, flagged.
-                    logger.warning("agent_unknown_tool", agent=spec.name, action=action)
-                output = step_data.get("input", response.content)
+            if action != "final" and action not in tool_index:
+                # Unknown action → correct the model and let it retry within budget.
+                logger.warning("agent_unknown_tool", agent=spec.name, action=action)
+                valid = ", ".join(tool_index) or "(none)"
+                messages.append(ChatMessage(role=MessageRole.ASSISTANT, content=response.content))
+                messages.append(
+                    ChatMessage(
+                        role=MessageRole.USER,
+                        content=f'Invalid action "{action}". Valid actions: {valid}, or "final" '
+                        'with your complete answer in "input". Reply with ONE JSON object.',
+                    )
+                )
+                steps.append(AgentStep(iteration, thought, f"invalid:{action}", ""))
+                continue
+
+            if action == "final":
+                output = step_data.get("input") or thought or response.content
                 result.output = (
                     output
                     if isinstance(output, str)
