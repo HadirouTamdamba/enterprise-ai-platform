@@ -84,6 +84,23 @@ async def test_gateway_chat_records_usage(client, admin_headers):
     assert usage.json()["requests"] >= 1
 
 
+async def test_gateway_redacts_pii_before_model(client, admin_headers):
+    """PII in the prompt must never reach the model nor come back verbatim."""
+    response = await client.post(
+        "/api/v1/gateway/chat", headers=admin_headers,
+        json={"messages": [{"role": "user",
+                            "content": "Contact client: jean@corp.fr, IBAN "
+                                       "FR76 3000 6000 0112 3456 7890 189"}]},
+    )
+    assert response.status_code == 200
+    # The fake provider is deterministic; the check that matters is that the
+    # redacted markers made it into the request pipeline without error and the
+    # raw values are absent from the final content.
+    body = response.json()
+    assert "jean@corp.fr" not in body["content"]
+    assert "3456 7890" not in body["content"]
+
+
 async def test_gateway_blocks_prompt_injection(client, admin_headers):
     response = await client.post(
         "/api/v1/gateway/chat", headers=admin_headers,

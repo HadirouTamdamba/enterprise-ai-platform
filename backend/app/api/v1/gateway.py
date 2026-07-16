@@ -7,7 +7,7 @@ from fastapi.responses import StreamingResponse
 
 from app.ai.gateway.pricing import get_pricing
 from app.ai.gateway.service import LLMGatewayService
-from app.ai.guardrails.pipeline import validate_input
+from app.ai.guardrails.pipeline import validate_input, validate_output
 from app.api.deps import CurrentUser, DbSession, enforce_rate_limit, require_role
 from app.api.v1.schemas import ChatCompletionRequest, ChatCompletionResponse, UsageResponse
 from app.domain.entities.identity import Role
@@ -34,7 +34,10 @@ async def chat_completion(
 ) -> ChatCompletionResponse | StreamingResponse:
     for message in body.messages:
         if message.role == "user":
-            validate_input(message.content)
+            # Blocks injections AND replaces the content with its PII-redacted
+            # version — the model must never see raw personal data.
+            report = validate_input(message.content)
+            message.content = report.redacted_text
 
     project = None
     if body.project_id:
@@ -72,7 +75,7 @@ async def chat_completion(
         get_pricing(), response.model,
     )
     return ChatCompletionResponse(
-        content=response.content,
+        content=validate_output(response.content).redacted_text,
         provider=response.provider,
         model=response.model,
         finish_reason=response.finish_reason,
