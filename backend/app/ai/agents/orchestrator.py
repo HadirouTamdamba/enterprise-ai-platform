@@ -68,6 +68,9 @@ Available tools:
 
 Rules:
 - Use "final" with your complete answer in "input" when the task is done.
+- The final "input" is shown to a business user: write it as well-structured prose or
+  markdown IN THE LANGUAGE OF THE TASK — never as raw JSON data, unless the task
+  explicitly asks for JSON.
 - Never invent tool names. Validate your JSON. Emit exactly ONE JSON object per step.
 - Never repeat a tool call you already made with the same or similar input.
 - Be efficient: every step costs money — finish as soon as the task is solved."""
