@@ -109,6 +109,7 @@ scripts/         Bootstrap, seed, backup utilities
 | [Functional Specifications](docs/02-functional-specifications.md) | Feature catalogue & NFRs |
 | [Architecture](docs/03-architecture.md) | C4 diagrams, data flows, AI/RAG/LLMOps architecture |
 | [ADRs](docs/adr/) | Architecture decision records |
+| [API Reference](docs/api.md) | Endpoint map, OpenAPI pointers, examples |
 | [Deployment Guide](docs/deployment-guide.md) | Docker Compose, Kubernetes, Terraform |
 | [Developer Guide](docs/developer-guide.md) | Codebase conventions, adding providers/agents |
 | [Administrator Guide](docs/administrator-guide.md) | RBAC, tenants, quotas, governance |
