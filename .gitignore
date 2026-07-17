@@ -54,3 +54,6 @@ logs/
 docs/demo-script.md
 docs/presentation/
 *.pptx
+
+# Next.js auto-generated
+frontend/next-env.d.ts
