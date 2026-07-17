@@ -27,6 +27,21 @@ class TestRoleHierarchy:
     def test_compliance_officer_is_not_workspace_admin(self):
         assert not role_at_least(Role.COMPLIANCE_OFFICER, Role.WORKSPACE_ADMIN)
 
+    def test_compliance_officer_cannot_build(self):
+        # Oversight role — must NOT inherit engineer's build permissions.
+        assert not role_at_least(Role.COMPLIANCE_OFFICER, Role.ENGINEER)
+        # …but can still read and use analyst-level features.
+        assert role_at_least(Role.COMPLIANCE_OFFICER, Role.VIEWER)
+        assert role_at_least(Role.COMPLIANCE_OFFICER, Role.ANALYST)
+
+    def test_separation_of_duties_engineer_cannot_approve(self):
+        # Governance gate: only oversight roles satisfy COMPLIANCE_OFFICER.
+        assert not role_at_least(Role.ENGINEER, Role.COMPLIANCE_OFFICER)
+        assert not role_at_least(Role.WORKSPACE_ADMIN, Role.COMPLIANCE_OFFICER)
+        assert role_at_least(Role.COMPLIANCE_OFFICER, Role.COMPLIANCE_OFFICER)
+        assert role_at_least(Role.PLATFORM_ADMIN, Role.COMPLIANCE_OFFICER)
+        assert role_at_least(Role.ORG_ADMIN, Role.COMPLIANCE_OFFICER)
+
 
 class TestRouting:
     def test_explicit_request_wins(self):

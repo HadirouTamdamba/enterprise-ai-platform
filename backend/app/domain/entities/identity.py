@@ -16,21 +16,38 @@ class Role(StrEnum):
     VIEWER = "viewer"
 
 
-# Ordered by privilege; used for "at least role X" checks.
-_ROLE_RANK: dict[Role, int] = {
+# The "build ladder": a linear seniority for creating/managing resources.
+# compliance_officer is deliberately OFF this ladder — it is an oversight role,
+# not a builder. It sits at analyst level here (read + playground + agents) so it
+# CANNOT create projects, KBs, models or prompts (which need ENGINEER).
+_BUILD_RANK: dict[Role, int] = {
     Role.VIEWER: 0,
     Role.ANALYST: 1,
+    Role.COMPLIANCE_OFFICER: 1,
     Role.ENGINEER: 2,
-    Role.COMPLIANCE_OFFICER: 2,
     Role.WORKSPACE_ADMIN: 3,
     Role.ORG_ADMIN: 4,
     Role.PLATFORM_ADMIN: 5,
 }
 
+# Governance/oversight capability is orthogonal to the build ladder: only these
+# roles may review approvals and read the audit trail — never an engineer.
+# This is what makes separation of duties real rather than rank-based.
+_GOVERNANCE_ROLES: frozenset[Role] = frozenset(
+    {Role.COMPLIANCE_OFFICER, Role.ORG_ADMIN, Role.PLATFORM_ADMIN}
+)
+
 
 def role_at_least(actual: Role, required: Role) -> bool:
-    """Business rule: role hierarchy for authorization checks."""
-    return _ROLE_RANK[actual] >= _ROLE_RANK[required]
+    """Authorization rule.
+
+    Governance-gated endpoints (required == COMPLIANCE_OFFICER) are satisfied
+    only by explicit oversight roles — an ENGINEER, however senior on the build
+    ladder, can never approve. All other gates use the linear build ladder.
+    """
+    if required == Role.COMPLIANCE_OFFICER:
+        return actual in _GOVERNANCE_ROLES
+    return _BUILD_RANK[actual] >= _BUILD_RANK[required]
 
 
 @dataclass(slots=True)
