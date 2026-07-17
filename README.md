@@ -3,10 +3,23 @@
 > A production-grade, self-hosted platform to **design, build, deploy, monitor and govern AI applications at scale** — RAG, AI Agents, LLMOps, MLOps and AI Governance in a single, provider-agnostic control plane.
 
 [![CI](https://github.com/HadirouTamdamba/enterprise-ai-platform/actions/workflows/ci.yml/badge.svg)](https://github.com/HadirouTamdamba/enterprise-ai-platform/actions/workflows/ci.yml)
+[![Docker Images](https://github.com/HadirouTamdamba/enterprise-ai-platform/actions/workflows/docker.yml/badge.svg)](https://github.com/HadirouTamdamba/enterprise-ai-platform/actions/workflows/docker.yml)
 ![Python](https://img.shields.io/badge/python-3.12-blue)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688)
-![Next.js](https://img.shields.io/badge/Next.js-14-black)
+![Next.js](https://img.shields.io/badge/Next.js-15-black)
 ![License](https://img.shields.io/badge/license-MIT-green)
+
+**Container images** (public on GitHub Container Registry — no login required):
+
+[![backend](https://img.shields.io/badge/ghcr.io-eap--backend-2496ED?logo=docker&logoColor=white)](https://github.com/HadirouTamdamba/enterprise-ai-platform/pkgs/container/eap-backend)
+[![worker](https://img.shields.io/badge/ghcr.io-eap--worker-2496ED?logo=docker&logoColor=white)](https://github.com/HadirouTamdamba/enterprise-ai-platform/pkgs/container/eap-worker)
+[![frontend](https://img.shields.io/badge/ghcr.io-eap--frontend-2496ED?logo=docker&logoColor=white)](https://github.com/HadirouTamdamba/enterprise-ai-platform/pkgs/container/eap-frontend)
+
+```bash
+docker pull ghcr.io/hadiroutamdamba/eap-backend:main
+docker pull ghcr.io/hadiroutamdamba/eap-worker:main
+docker pull ghcr.io/hadiroutamdamba/eap-frontend:main
+```
 
 ---
 
