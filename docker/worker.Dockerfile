@@ -1,10 +1,10 @@
-FROM python:3.12-slim AS builder
+FROM python:3.14-slim AS builder
 WORKDIR /build
 COPY backend/pyproject.toml ./
 COPY backend/app ./app
 RUN pip install --no-cache-dir --prefix=/install ".[providers,ml]"
 
-FROM python:3.12-slim
+FROM python:3.14-slim
 RUN useradd --create-home --uid 1000 eap
 WORKDIR /srv
 COPY --from=builder /install /usr/local
