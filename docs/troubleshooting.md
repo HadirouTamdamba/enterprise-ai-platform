@@ -24,10 +24,27 @@
 | Symptom | Cause → Fix |
 |---|---|
 | Document stuck in `processing` | Worker down or broker unreachable → `docker compose logs worker`; re-upload retriggers |
-| Document `failed`: "No text could be extracted" | Scanned PDF without OCR → install the `ocr` extra + tesseract, re-upload |
+| Document `failed`: "Event loop is closed" | Fixed — the worker now uses one persistent event loop per process. If seen on an older build, rebuild the worker: `docker compose up -d --build worker` |
+| Document `failed`: "No text could be extracted" | Genuinely scanned/image PDF → text can't be extracted without OCR. Install the `ocr` extra + tesseract (see below), or convert to a text-based PDF |
 | Empty answers / "could not find relevant information" | Threshold too strict or wrong KB → lower `similarity_threshold`, verify documents are `indexed` |
 | Poor answer quality with no API keys | Local hash embeddings are lexical-only degraded mode → configure a real embedding provider |
 | Answers cite stale content | Old version vectors not yet refreshed → re-upload completes the swap; check worker logs |
+
+### Enabling OCR for scanned (image-based) PDFs
+
+Text-based documents (PDF, DOCX, PPTX, XLSX, HTML, Markdown) index out of the box. Scanned
+PDFs and images require OCR, which is an opt-in extra (keeps the default image slim):
+
+1. Install the Python extra and system binaries in the worker image — add to
+   `docker/worker.Dockerfile` before the `pip install`:
+   ```dockerfile
+   RUN apt-get update && apt-get install -y --no-install-recommends \
+       tesseract-ocr tesseract-ocr-fra poppler-utils && rm -rf /var/lib/apt/lists/*
+   ```
+   and install the extra: `pip install ".[providers,ml,ocr]"`.
+2. Rebuild: `docker compose up -d --build worker`.
+
+The parsers already fall back to OCR automatically for pages with no extractable text.
 
 ## Kubernetes
 
