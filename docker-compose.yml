@@ -121,7 +121,13 @@ services:
   grafana:
     image: grafana/grafana:11.1.0
     environment:
+      GF_SECURITY_ADMIN_USER: admin
       GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin}
+      # Local demo convenience: never lock the admin account on repeated logins,
+      # and skip the "change password" prompt on first sign-in.
+      GF_SECURITY_DISABLE_BRUTE_FORCE_LOGIN_PROTECTION: "true"
+      GF_AUTH_DISABLE_LOGIN_FORM: "false"
+      GF_USERS_ALLOW_SIGN_UP: "false"
     volumes:
       - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
       - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
