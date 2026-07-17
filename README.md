@@ -96,6 +96,25 @@ make test          # full test suite
 make lint          # ruff + mypy + eslint
 ```
 
+## Demo & seed helpers
+
+With the stack running (`make up`), these populate the platform with realistic content:
+
+```bash
+# End-to-end walkthrough: auth → gateway → RAG (cited) → agent → governance gate → cost analytics
+python scripts/run_demo.py
+
+# Seed MLflow with a fraud-scoring experiment (3 tracked runs + registered model)
+MLFLOW_TRACKING_URI=http://localhost:5001 python scripts/seed_mlflow_demo.py
+
+# Import the versioned prompt templates into a project's Prompt Registry
+python scripts/import_prompts.py --email admin@example.com --password ... --project-id <uuid>
+```
+
+After `run_demo.py`, the Grafana **AI Operations** dashboard (`:3001`, admin/admin) shows
+live LLM/RAG/agent/guardrail curves; after `seed_mlflow_demo.py`, MLflow (`:5001`) shows the
+experiment-tracking and model-registry story.
+
 ## Repository layout
 
 ```
