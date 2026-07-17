@@ -1,4 +1,12 @@
-"""Async document ingestion task: parse → chunk → embed → index (idempotent)."""
+"""Async document ingestion task: parse → chunk → embed → index (idempotent).
+
+Celery is synchronous; the ingestion pipeline is async. Rather than a fresh
+``asyncio.run()`` per task — which closes the loop and orphans loop-bound
+singletons (the async SQLAlchemy engine, the AsyncQdrantClient), causing
+``Event loop is closed`` on every task after the first — each worker process
+keeps ONE persistent event loop for its whole lifetime. All async resources
+bind to it once and stay valid across tasks.
+"""
 
 import asyncio
 from uuid import UUID
@@ -18,6 +26,17 @@ from app.infrastructure.vector.qdrant_store import get_vector_store
 from app.workers.celery_app import celery_app
 
 logger = get_logger(__name__)
+
+_loop: asyncio.AbstractEventLoop | None = None
+
+
+def _get_loop() -> asyncio.AbstractEventLoop:
+    """Return this worker process's persistent event loop, creating it once."""
+    global _loop
+    if _loop is None or _loop.is_closed():
+        _loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(_loop)
+    return _loop
 
 
 async def _ingest(document_id: str) -> dict:
@@ -48,11 +67,11 @@ async def _ingest(document_id: str) -> dict:
 
 @celery_app.task(name="ingestion.process_document", bind=True, max_retries=2)
 def process_document(self, document_id: str) -> dict:
-    """Celery entrypoint — bridges to the async ingestion pipeline."""
+    """Celery entrypoint — runs the async pipeline on the persistent loop."""
     configure_logging()
     ACTIVE_INGESTIONS.inc()
     try:
-        return asyncio.run(_ingest(document_id))
+        return _get_loop().run_until_complete(_ingest(document_id))
     except Exception as exc:
         raise self.retry(exc=exc, countdown=60) from exc
     finally:
