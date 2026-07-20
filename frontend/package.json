@@ -14,14 +14,14 @@
     "next": "^15.5.16",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "@tanstack/react-query": "^5.51.0",
-    "zustand": "^4.5.4",
-    "lucide-react": "^0.408.0",
+    "@tanstack/react-query": "^5.101.3",
+    "zustand": "^5.0.14",
+    "lucide-react": "^1.25.0",
     "clsx": "^2.1.1",
-    "tailwind-merge": "^2.4.0"
+    "tailwind-merge": "^3.6.0"
   },
   "devDependencies": {
-    "@types/node": "^20.14.0",
+    "@types/node": "^26.1.1",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "autoprefixer": "^10.4.19",
