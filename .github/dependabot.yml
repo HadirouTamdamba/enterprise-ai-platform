@@ -2,12 +2,14 @@ version: 2
 updates:
   - package-ecosystem: pip
     directory: /backend
-    schedule: { interval: weekly }
+    schedule: { interval: monthly }
+    open-pull-requests-limit: 3
     groups:
       python-deps: { patterns: ["*"] }
   - package-ecosystem: npm
     directory: /frontend
-    schedule: { interval: weekly }
+    schedule: { interval: monthly }
+    open-pull-requests-limit: 3
     groups:
       js-deps: { patterns: ["*"] }
     # These are pinned to a stable major on purpose (e.g. Tailwind 3, TS 5).
