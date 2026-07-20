@@ -10,6 +10,20 @@ updates:
     schedule: { interval: weekly }
     groups:
       js-deps: { patterns: ["*"] }
+    # These are pinned to a stable major on purpose (e.g. Tailwind 3, TS 5).
+    # Keep receiving minor/patch security updates, but don't re-propose the
+    # breaking major bumps every week.
+    ignore:
+      - dependency-name: "tailwindcss"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "next"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "eslint"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "eslint-config-next"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: github-actions
     directory: /
     schedule: { interval: monthly }
