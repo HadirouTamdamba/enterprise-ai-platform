@@ -1,6 +1,6 @@
 # Functional Specifications (SRS) — Enterprise AI Platform
 
-**Version:** 1.0 · **Date:** 2026-07-16
+**Version:** 1.0 · **Date:** 2026-07-16 · **Author:** Hadirou Tamdamba
 
 ## 1. Feature catalogue
 

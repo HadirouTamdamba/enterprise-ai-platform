@@ -1,6 +1,6 @@
 # Business Analysis — Enterprise AI Platform (EAP)
 
-**Version:** 1.0 · **Date:** 2026-07-16 · **Status:** Approved · **Owner:** AI Solutions Lead
+**Version:** 1.0 · **Date:** 2026-07-16 · **Status:** Approved · **Owner:** Hadirou Tamdamba
 
 ## 1. Executive summary
 
