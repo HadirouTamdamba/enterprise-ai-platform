@@ -1,0 +1,24 @@
+# Overlay that runs the PUBLISHED images from GitHub Container Registry instead of
+# building them locally — the "nothing to build" fast path. The images are public
+# and multi-architecture (linux/amd64 + linux/arm64), so they run natively on
+# Intel/AMD and on Apple Silicon.
+#
+# Usage (pulls prebuilt app images, builds nothing):
+#   docker compose -f docker-compose.yml -f docker-compose.ghcr.yml pull
+#   docker compose -f docker-compose.yml -f docker-compose.ghcr.yml up -d
+# or simply:  make up-ghcr
+#
+# Override EAP_IMAGE_TAG to pin a specific version (default: the latest main build).
+services:
+  backend:
+    image: ghcr.io/hadiroutamdamba/eap-backend:${EAP_IMAGE_TAG:-main}
+    build: !reset null
+  seed:
+    image: ghcr.io/hadiroutamdamba/eap-backend:${EAP_IMAGE_TAG:-main}
+    build: !reset null
+  worker:
+    image: ghcr.io/hadiroutamdamba/eap-worker:${EAP_IMAGE_TAG:-main}
+    build: !reset null
+  frontend:
+    image: ghcr.io/hadiroutamdamba/eap-frontend:${EAP_IMAGE_TAG:-main}
+    build: !reset null

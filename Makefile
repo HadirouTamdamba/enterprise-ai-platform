@@ -13,6 +13,10 @@ install: ## Install backend and frontend dependencies
 up: ## Start the full stack (build if needed)
 	docker compose up -d --build
 
+up-ghcr: ## Start the stack from published GHCR images (nothing to build)
+	docker compose -f docker-compose.yml -f docker-compose.ghcr.yml pull
+	docker compose -f docker-compose.yml -f docker-compose.ghcr.yml up -d
+
 up-deps: ## Start only infrastructure dependencies (postgres, redis, qdrant, monitoring)
 	docker compose up -d postgres redis qdrant prometheus grafana loki
 

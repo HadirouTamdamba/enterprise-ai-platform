@@ -69,12 +69,45 @@ Full architecture: [docs/03-architecture.md](docs/03-architecture.md) — decisi
 
 ## Quick start (Docker Compose)
 
+The platform is a multi-service stack (API, worker, frontend + PostgreSQL, Redis,
+Qdrant, monitoring), so it runs via Docker Compose. Pick one of two paths.
+
+### Option 1 — Build locally (for development)
+
 ```bash
 git clone https://github.com/HadirouTamdamba/enterprise-ai-platform.git
 cd enterprise-ai-platform
 cp .env.example .env          # add at least one LLM provider API key
 make up                        # builds & starts the full stack
 ```
+
+### Option 2 — Run the published images (fastest, nothing to build)
+
+The application images (`eap-backend`, `eap-worker`, `eap-frontend`) are published
+publicly to GitHub Container Registry — no login required. They are
+**multi-architecture** (`linux/amd64` + `linux/arm64`), so they run natively on
+Intel/AMD machines and on Apple Silicon. The overlay pulls them instead of building:
+
+```bash
+git clone https://github.com/HadirouTamdamba/enterprise-ai-platform.git
+cd enterprise-ai-platform
+cp .env.example .env          # add at least one LLM provider API key
+make up-ghcr                    # pulls prebuilt images, builds nothing
+```
+
+Equivalently, without the Makefile:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.ghcr.yml pull
+docker compose -f docker-compose.yml -f docker-compose.ghcr.yml up -d
+```
+
+Pin a specific version with `EAP_IMAGE_TAG` (e.g. `EAP_IMAGE_TAG=sha-1a2b3c4 make up-ghcr`).
+
+> The repo checkout is still required either way — the infrastructure services mount
+> their config from `monitoring/`, `infrastructure/nginx/` and `.env`.
+
+### Services
 
 | Service | URL |
 |---|---|
@@ -83,6 +116,7 @@ make up                        # builds & starts the full stack
 | Grafana | http://localhost:3001 (admin / admin) |
 | Prometheus | http://localhost:9090 |
 | Qdrant dashboard | http://localhost:6333/dashboard |
+| MLflow | http://localhost:5001 |
 
 First admin user is seeded from `.env` (`ADMIN_EMAIL` / `ADMIN_PASSWORD`).
 
