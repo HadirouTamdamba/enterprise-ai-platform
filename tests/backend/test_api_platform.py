@@ -161,7 +161,7 @@ async def test_governance_model_lifecycle_with_approval_gate(client, admin_heade
         )
     ).json()
 
-    # High-risk without approval → blocked.
+    # High-risk without approval -> blocked.
     blocked = await client.post(
         f"/api/v1/governance/models/{model['id']}/promote", headers=engineer_headers
     )

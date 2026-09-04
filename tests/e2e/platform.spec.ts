@@ -1,5 +1,5 @@
 /**
- * End-to-end smoke suite (Playwright) — runs against the Docker Compose stack.
+ * End-to-end smoke suite (Playwright) - runs against the Docker Compose stack.
  *
  * Usage:
  *   npx playwright install chromium

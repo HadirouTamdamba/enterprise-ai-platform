@@ -41,7 +41,7 @@ async def test_wrong_password_gives_generic_401(client):
         "/api/v1/auth/login", data={"username": "ghost@corp.com", "password": "wrong-pass-123"}
     )
     assert bad_password.status_code == unknown_user.status_code == 401
-    # Same message in both cases — no account enumeration.
+    # Same message in both cases - no account enumeration.
     assert bad_password.json()["message"] == unknown_user.json()["message"]
 
 

@@ -1,4 +1,4 @@
-"""LLM Gateway — the single entry point for every model call on the platform.
+"""LLM Gateway - the single entry point for every model call on the platform.
 
 Responsibilities: routing (with project defaults), fallback chains, retries,
 response caching, token/cost accounting, metrics. Guardrails are applied by

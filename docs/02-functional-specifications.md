@@ -1,4 +1,4 @@
-# Functional Specifications (SRS) — Enterprise AI Platform
+# Functional Specifications (SRS) - Enterprise AI Platform
 
 **Version:** 1.0 · **Date:** 2026-07-16 · **Author:** Hadirou Tamdamba
 
@@ -52,7 +52,7 @@
 |---|---|---|
 | F-30 | Agent registry | Declarative agent definitions (role, tools, model, memory, limits) |
 | F-31 | Specialized agents | Planner, Research, Retriever, Compliance, Security, Developer, Documentation, Reviewer, Critic, Reporting |
-| F-32 | Orchestrator | Plan → execute → reflect loops with max-iteration and budget guards |
+| F-32 | Orchestrator | Plan -> execute -> reflect loops with max-iteration and budget guards |
 | F-33 | Tooling | Typed tool schemas, validated results, full execution logging |
 | F-34 | Agent evaluation | Task success rate, tool success rate, cost per task |
 
@@ -94,4 +94,4 @@
 ## 3. Out of scope (v1)
 
 Fine-tuning orchestration UI, multi-region active-active, mobile apps, marketplace billing,
-SOC2 attestation tooling (planned v2 — see release notes).
+SOC2 attestation tooling (planned v2 - see release notes).

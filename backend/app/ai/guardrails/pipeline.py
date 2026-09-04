@@ -72,7 +72,7 @@ def check_toxicity(text: str) -> bool:
 def validate_input(
     text: str, *, redact: bool = True, raise_on_block: bool = True
 ) -> GuardrailReport:
-    """Run input guardrails: injection → toxicity → PII redaction."""
+    """Run input guardrails: injection -> toxicity -> PII redaction."""
     report = GuardrailReport(redacted_text=text)
     if check_prompt_injection(text):
         report.passed = False

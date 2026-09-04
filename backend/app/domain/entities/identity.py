@@ -1,4 +1,4 @@
-"""Identity & tenancy domain entities. Pure Python — no framework imports."""
+"""Identity & tenancy domain entities. Pure Python - no framework imports."""
 
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
@@ -17,7 +17,7 @@ class Role(StrEnum):
 
 
 # The "build ladder": a linear seniority for creating/managing resources.
-# compliance_officer is deliberately OFF this ladder — it is an oversight role,
+# compliance_officer is deliberately OFF this ladder - it is an oversight role,
 # not a builder. It sits at analyst level here (read + playground + agents) so it
 # CANNOT create projects, KBs, models or prompts (which need ENGINEER).
 _BUILD_RANK: dict[Role, int] = {
@@ -31,7 +31,7 @@ _BUILD_RANK: dict[Role, int] = {
 }
 
 # Governance/oversight capability is orthogonal to the build ladder: only these
-# roles may review approvals and read the audit trail — never an engineer.
+# roles may review approvals and read the audit trail - never an engineer.
 # This is what makes separation of duties real rather than rank-based.
 _GOVERNANCE_ROLES: frozenset[Role] = frozenset(
     {Role.COMPLIANCE_OFFICER, Role.ORG_ADMIN, Role.PLATFORM_ADMIN}
@@ -42,7 +42,7 @@ def role_at_least(actual: Role, required: Role) -> bool:
     """Authorization rule.
 
     Governance-gated endpoints (required == COMPLIANCE_OFFICER) are satisfied
-    only by explicit oversight roles — an ENGINEER, however senior on the build
+    only by explicit oversight roles - an ENGINEER, however senior on the build
     ladder, can never approve. All other gates use the linear build ladder.
     """
     if required == Role.COMPLIANCE_OFFICER:

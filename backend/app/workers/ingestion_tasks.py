@@ -1,9 +1,9 @@
-"""Async document ingestion task: parse → chunk → embed → index (idempotent).
+"""Async document ingestion task: parse -> chunk -> embed -> index (idempotent).
 
 Celery is synchronous; the ingestion pipeline is async. Rather than a fresh
-``asyncio.run()`` per task — which closes the loop and orphans loop-bound
+``asyncio.run()`` per task - which closes the loop and orphans loop-bound
 singletons (the async SQLAlchemy engine, the AsyncQdrantClient), causing
-``Event loop is closed`` on every task after the first — each worker process
+``Event loop is closed`` on every task after the first - each worker process
 keeps ONE persistent event loop for its whole lifetime. All async resources
 bind to it once and stay valid across tasks.
 """
@@ -67,7 +67,7 @@ async def _ingest(document_id: str) -> dict:
 
 @celery_app.task(name="ingestion.process_document", bind=True, max_retries=2)
 def process_document(self, document_id: str) -> dict:
-    """Celery entrypoint — runs the async pipeline on the persistent loop."""
+    """Celery entrypoint - runs the async pipeline on the persistent loop."""
     configure_logging()
     ACTIVE_INGESTIONS.inc()
     try:

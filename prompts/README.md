@@ -8,4 +8,4 @@ YAML for review in pull requests.
 Conventions:
 - One file per prompt, `snake_case.yaml`
 - `variables` use `{{name}}` placeholders
-- Bump `version` and describe the change in `changelog` — never edit a shipped version in place
+- Bump `version` and describe the change in `changelog` - never edit a shipped version in place

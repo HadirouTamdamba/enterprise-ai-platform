@@ -1,4 +1,4 @@
-"""Unit tests for pure domain logic — no I/O."""
+"""Unit tests for pure domain logic - no I/O."""
 
 from uuid import uuid4
 
@@ -28,9 +28,9 @@ class TestRoleHierarchy:
         assert not role_at_least(Role.COMPLIANCE_OFFICER, Role.WORKSPACE_ADMIN)
 
     def test_compliance_officer_cannot_build(self):
-        # Oversight role — must NOT inherit engineer's build permissions.
+        # Oversight role - must NOT inherit engineer's build permissions.
         assert not role_at_least(Role.COMPLIANCE_OFFICER, Role.ENGINEER)
-        # …but can still read and use analyst-level features.
+        # ...but can still read and use analyst-level features.
         assert role_at_least(Role.COMPLIANCE_OFFICER, Role.VIEWER)
         assert role_at_least(Role.COMPLIANCE_OFFICER, Role.ANALYST)
 

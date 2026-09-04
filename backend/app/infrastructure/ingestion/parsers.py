@@ -45,7 +45,7 @@ def _parse_pdf(path: Path) -> list[PageText]:
     pages: list[PageText] = []
     for number, page in enumerate(reader.pages, start=1):
         text = page.extract_text() or ""
-        if not text.strip():  # scanned page → OCR fallback if available
+        if not text.strip():  # scanned page -> OCR fallback if available
             text = _ocr_pdf_page(path, number)
         pages.append((number, text))
     return pages

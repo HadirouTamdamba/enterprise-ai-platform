@@ -25,7 +25,7 @@ def _request(url: str, data: dict | None = None, token: str = "", form: bool = F
     if token:
         headers["Authorization"] = f"Bearer {token}"
     req = urllib.request.Request(url, data=body, headers=headers)
-    with urllib.request.urlopen(req) as response:  # noqa: S310 — operator-provided URL
+    with urllib.request.urlopen(req) as response:  # noqa: S310 - operator-provided URL
         return json.loads(response.read())
 
 
@@ -85,10 +85,10 @@ def main() -> int:
         try:
             _request(f"{args.api}/prompts", payload, token=token)
             imported += 1
-            print(f"imported: {payload['name']}")  # noqa: T201 — CLI
+            print(f"imported: {payload['name']}")  # noqa: T201 - CLI
         except Exception as exc:  # conflict = already imported
-            print(f"skipped {payload['name']}: {exc}")  # noqa: T201 — CLI
-    print(f"done — {imported} prompts imported")  # noqa: T201 — CLI
+            print(f"skipped {payload['name']}: {exc}")  # noqa: T201 - CLI
+    print(f"done - {imported} prompts imported")  # noqa: T201 - CLI
     return 0
 
 

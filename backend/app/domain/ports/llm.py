@@ -1,4 +1,4 @@
-"""LLM provider port — the vendor-agnostic contract every adapter implements (ADR-002)."""
+"""LLM provider port - the vendor-agnostic contract every adapter implements (ADR-002)."""
 
 from abc import ABC, abstractmethod
 from collections.abc import AsyncIterator

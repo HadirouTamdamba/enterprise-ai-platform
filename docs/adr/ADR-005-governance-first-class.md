@@ -15,4 +15,4 @@ layer. The audit log is append-only and hash-chained for tamper evidence.
 ## Consequences
 + Compliance artifacts are always in sync with what actually runs.
 + Auditors get exportable, verifiable evidence.
-− Slight friction on deployment flows for high-risk assets — intended and configurable per org.
+- Slight friction on deployment flows for high-risk assets - intended and configurable per org.

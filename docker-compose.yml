@@ -1,4 +1,4 @@
-# Enterprise AI Platform — full evaluation/development stack
+# Enterprise AI Platform - full evaluation/development stack
 # Usage: cp .env.example .env && docker compose up -d --build
 
 services:

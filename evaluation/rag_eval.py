@@ -2,7 +2,7 @@
 
 Runs fully offline (local embeddings + in-memory vector store) so it can gate CI.
 With provider keys configured, the same harness measures the production embedding
-model instead — set EVAL_EMBEDDING_PROVIDER.
+model instead - set EVAL_EMBEDDING_PROVIDER.
 
 Usage: python -m evaluation.rag_eval  (from backend/ with the venv active)
 """
@@ -70,5 +70,5 @@ async def evaluate() -> dict:
 
 if __name__ == "__main__":
     result = asyncio.run(evaluate())
-    print(json.dumps(result, indent=2))  # noqa: T201 — CLI entrypoint
+    print(json.dumps(result, indent=2))  # noqa: T201 - CLI entrypoint
     sys.exit(0 if result["passed"] else 1)

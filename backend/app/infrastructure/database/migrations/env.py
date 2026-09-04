@@ -1,4 +1,4 @@
-"""Alembic environment — async engine, metadata from ORM models."""
+"""Alembic environment - async engine, metadata from ORM models."""
 
 import asyncio
 from logging.config import fileConfig

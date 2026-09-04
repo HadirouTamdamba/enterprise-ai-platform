@@ -1,6 +1,6 @@
 name: conversation_compression
 version: 1
-description: Context compression — summarize older conversation turns to fit the context window.
+description: Context compression - summarize older conversation turns to fit the context window.
 model_hint: claude-haiku-4-5-20251001
 variables: [conversation]
 changelog: Initial version

@@ -1,4 +1,4 @@
-"""Initial schema — all platform tables from ORM metadata.
+"""Initial schema - all platform tables from ORM metadata.
 
 Revision ID: 0001
 Revises:

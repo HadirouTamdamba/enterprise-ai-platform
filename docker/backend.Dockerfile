@@ -1,4 +1,4 @@
-# Multi-stage build — slim, non-root, healthcheck-ready
+# Multi-stage build - slim, non-root, healthcheck-ready
 FROM python:3.12-slim AS builder
 WORKDIR /build
 COPY backend/pyproject.toml ./
@@ -18,6 +18,6 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=20s \
   CMD python -c "import urllib.request;urllib.request.urlopen('http://localhost:8000/api/v1/health/live')" || exit 1
 # One worker per container: the Prometheus client keeps counters per-process, so
 # multiple uvicorn workers would fragment /metrics. Scale horizontally via pod
-# replicas instead (see kubernetes/backend.yaml + HPA) — Prometheus then scrapes
+# replicas instead (see kubernetes/backend.yaml + HPA) - Prometheus then scrapes
 # each pod and the metrics stay complete and accurate.
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]

@@ -60,7 +60,7 @@ async def list_models(
 async def promote_model(
     model_id: UUID, session: DbSession, actor: CurrentUser
 ) -> ModelResponse:
-    """Promote to production — enforces the human-approval gate for high-risk models."""
+    """Promote to production - enforces the human-approval gate for high-risk models."""
     repo = ModelRegistryRepository(session)
     model = await repo.get(model_id)
     risk = RiskLevel(model.risk_level)
@@ -109,7 +109,7 @@ async def rollback_model(
 
 @router.get("/models/{model_id}/card", dependencies=[require_role(Role.VIEWER)])
 async def model_card(model_id: UUID, session: DbSession) -> dict:
-    """Model card (F-51) generated live from registry metadata — never stale."""
+    """Model card (F-51) generated live from registry metadata - never stale."""
     model = await ModelRegistryRepository(session).get(model_id)
     return {
         "model_card": {

@@ -50,7 +50,7 @@ class Settings(BaseSettings):
     qdrant_port: int = 6333
     qdrant_collection_prefix: str = "eap"
 
-    # Provider API keys (optional — presence enables the provider)
+    # Provider API keys (optional - presence enables the provider)
     anthropic_api_key: str = ""
     openai_api_key: str = ""
     google_api_key: str = ""

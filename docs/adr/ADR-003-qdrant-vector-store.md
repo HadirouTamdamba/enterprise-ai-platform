@@ -18,4 +18,4 @@ degrades at high dimensionality/scale and lacks native hybrid scoring.
 
 ## Consequences
 + Workspace isolation via per-workspace collections + payload filters.
-− One more stateful service to operate (covered by K8s StatefulSet + snapshots in the runbook).
+- One more stateful service to operate (covered by K8s StatefulSet + snapshots in the runbook).

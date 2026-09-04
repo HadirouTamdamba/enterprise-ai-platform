@@ -1,4 +1,4 @@
-# Business Analysis — Enterprise AI Platform (EAP)
+# Business Analysis - Enterprise AI Platform (EAP)
 
 **Version:** 1.0 · **Date:** 2026-07-16 · **Status:** Approved · **Owner:** Hadirou Tamdamba
 
@@ -13,7 +13,7 @@ management and AI governance behind one secure, multi-tenant API and dashboard.
 ## 2. Business objective
 
 Provide a single platform on which enterprise teams can **develop, deploy, monitor and govern AI
-applications** — reducing time-to-production for an AI use case from months to days while keeping
+applications** - reducing time-to-production for an AI use case from months to days while keeping
 cost, risk and compliance under central control.
 
 ## 3. End users & stakeholders
@@ -34,10 +34,10 @@ Risk & Legal (AI Act classification), business unit leaders (use-case demand).
 
 ## 4. Business value & expected ROI
 
-- **Engineering leverage:** shared LLM gateway + RAG platform removes ~60–80% of duplicated
+- **Engineering leverage:** shared LLM gateway + RAG platform removes ~60-80% of duplicated
   integration work per use case (industry-typical estimate for platform consolidation).
 - **Cost control:** central token/cost accounting and semantic caching typically reduce LLM spend
-  15–40% versus uncontrolled direct API usage.
+  15-40% versus uncontrolled direct API usage.
 - **Risk reduction:** approval workflows and audit trails avoid regulatory findings (EU AI Act
   fines up to 7% of global turnover for prohibited practices; 3% for other violations).
 - **Speed:** a governed RAG assistant can be assembled from existing components in < 1 day.

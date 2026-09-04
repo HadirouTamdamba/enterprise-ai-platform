@@ -35,7 +35,7 @@ async def chat_completion(
     for message in body.messages:
         if message.role == "user":
             # Blocks injections AND replaces the content with its PII-redacted
-            # version — the model must never see raw personal data.
+            # version - the model must never see raw personal data.
             report = validate_input(message.content)
             message.content = report.redacted_text
 

@@ -16,7 +16,7 @@ data:
   FALLBACK_LLM_MODEL: gpt-4o
   PUBLIC_API_URL: https://ai-platform.example.com/api/v1
 ---
-# TEMPLATE ONLY — create the real secret via your secret manager / external-secrets:
+# TEMPLATE ONLY - create the real secret via your secret manager / external-secrets:
 #   kubectl create secret generic eap-secrets -n eap \
 #     --from-literal=SECRET_KEY=$(openssl rand -hex 32) \
 #     --from-literal=POSTGRES_USER=eap \

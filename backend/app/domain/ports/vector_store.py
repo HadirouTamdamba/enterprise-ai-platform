@@ -1,4 +1,4 @@
-"""Vector store port — keeps business logic independent from Qdrant/pgvector/etc. (ADR-003)."""
+"""Vector store port - keeps business logic independent from Qdrant/pgvector/etc. (ADR-003)."""
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field

@@ -60,4 +60,4 @@ async def enforce_rate_limit(
         window_seconds=60,
     )
     if not allowed:
-        raise RateLimitExceededError("Request rate limit exceeded — retry later")
+        raise RateLimitExceededError("Request rate limit exceeded - retry later")

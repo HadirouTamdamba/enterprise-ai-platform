@@ -1,6 +1,6 @@
 """LLM provider adapters implementing LLMProviderPort (ADR-002).
 
-All adapters use httpx directly — no vendor SDK lock-in, uniform timeout/retry
+All adapters use httpx directly - no vendor SDK lock-in, uniform timeout/retry
 behavior, and a single dependency surface. Each adapter normalizes its vendor's
 wire format to the canonical ChatRequest/ChatResponse contract.
 """
@@ -125,7 +125,7 @@ class OpenAICompatibleProvider(LLMProviderPort):
     """OpenAI Chat Completions wire format.
 
     Covers OpenAI, Mistral, DeepSeek, OpenRouter, Ollama, Azure OpenAI and any
-    OpenAI-compatible endpoint — the de-facto industry standard.
+    OpenAI-compatible endpoint - the de-facto industry standard.
     """
 
     def __init__(

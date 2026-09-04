@@ -1,6 +1,6 @@
-# Politique d'Utilisation de l'Intelligence Artificielle — Groupe Meridian
+# Politique d'Utilisation de l'Intelligence Artificielle - Groupe Meridian
 
-**Version 3.2 — Direction des Risques et de la Conformité**
+**Version 3.2 - Direction des Risques et de la Conformité**
 
 ## 1. Gouvernance des modèles
 

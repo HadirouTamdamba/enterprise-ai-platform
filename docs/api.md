@@ -14,7 +14,7 @@ except registration, login, refresh and health probes. Errors are standardized:
 | Users | `GET /users` · `PATCH /users/{id}` |
 | LLM Gateway | `GET /gateway/providers` · `POST /gateway/chat` (set `"stream": true` for SSE) |
 | Prompts | `GET/POST /prompts` · `GET/POST /prompts/{id}/versions` · `POST /prompts/{id}/versions/{n}/activate` |
-| RAG | `GET/POST /rag/knowledge-bases` · `POST /rag/knowledge-bases/{id}/documents` (multipart) · `GET …/documents` · `POST /rag/query` · `POST /rag/feedback` |
+| RAG | `GET/POST /rag/knowledge-bases` · `POST /rag/knowledge-bases/{id}/documents` (multipart) · `GET .../documents` · `POST /rag/query` · `POST /rag/feedback` |
 | Agents | `GET /agents` · `POST /agents/run` |
 | Governance | `GET/POST /governance/models` · `POST /governance/models/{id}/promote\|rollback` · `GET /governance/models/{id}/card` · `GET/POST /governance/approvals` · `POST /governance/approvals/{id}/decide` · `GET /governance/audit` · `GET /governance/inventory` |
 | Monitoring | `GET /monitoring/usage` · `GET /monitoring/usage/by-model` · `GET /monitoring/costs` |
@@ -31,5 +31,5 @@ curl -s localhost:8000/api/v1/gateway/chat \
   -d '{"messages":[{"role":"user","content":"Say hello"}]}' | jq
 ```
 
-A complete Python walkthrough (login → KB → upload → RAG query → cost check) lives in
+A complete Python walkthrough (login -> KB -> upload -> RAG query -> cost check) lives in
 [`examples/api_usage.py`](../examples/api_usage.py).

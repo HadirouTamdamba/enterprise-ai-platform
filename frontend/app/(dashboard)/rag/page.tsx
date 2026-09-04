@@ -148,7 +148,7 @@ export default function RagStudioPage() {
           ) : (
             <div className="space-y-3">
               <label className="flex cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-zinc-300 p-6 text-sm text-zinc-500 hover:border-brand-500 dark:border-zinc-700">
-                {upload.isPending ? <Spinner /> : "Click to upload (PDF, DOCX, PPTX, XLSX, MD, CSV, HTML…)"}
+                {upload.isPending ? <Spinner /> : "Click to upload (PDF, DOCX, PPTX, XLSX, MD, CSV, HTML...)"}
                 <input
                   type="file"
                   className="hidden"
@@ -188,7 +188,7 @@ export default function RagStudioPage() {
         <div className="space-y-3">
           <Textarea
             rows={2}
-            placeholder="Ask a question grounded in your documents…"
+            placeholder="Ask a question grounded in your documents..."
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
           />
@@ -196,7 +196,7 @@ export default function RagStudioPage() {
             onClick={() => ask.mutate()}
             disabled={!selectedKb || question.length < 3 || ask.isPending}
           >
-            {ask.isPending ? "Thinking…" : "Ask"}
+            {ask.isPending ? "Thinking..." : "Ask"}
           </Button>
           {ask.isError && (
             <p className="text-sm text-red-600">{(ask.error as Error).message}</p>
@@ -216,7 +216,7 @@ export default function RagStudioPage() {
                     {answer.citations.map((c, i) => (
                       <li key={i}>
                         [{i + 1}] {c.filename}
-                        {c.page ? ` — p.${c.page}` : ""} (score {c.score.toFixed(2)})
+                        {c.page ? ` - p.${c.page}` : ""} (score {c.score.toFixed(2)})
                       </li>
                     ))}
                   </ul>

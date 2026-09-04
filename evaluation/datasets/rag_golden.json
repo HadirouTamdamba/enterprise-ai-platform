@@ -1,5 +1,5 @@
 {
-  "description": "Golden RAG evaluation set — extend with domain-specific Q/A pairs per deployment",
+  "description": "Golden RAG evaluation set - extend with domain-specific Q/A pairs per deployment",
   "corpus": [
     {
       "id": "policy-1",

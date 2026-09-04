@@ -1,5 +1,5 @@
 """AI domain entities: prompts, knowledge bases, documents, conversations, usage,
-model registry and governance artifacts. Pure Python — no framework imports."""
+model registry and governance artifacts. Pure Python - no framework imports."""
 
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
@@ -143,7 +143,7 @@ class Citation:
 
 @dataclass(slots=True)
 class UsageRecord:
-    """One LLM call's accounting record — the atom of cost governance."""
+    """One LLM call's accounting record - the atom of cost governance."""
 
     provider: str
     model: str

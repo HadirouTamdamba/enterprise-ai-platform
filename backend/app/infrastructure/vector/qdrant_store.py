@@ -149,7 +149,7 @@ _store: VectorStorePort | None = None
 
 
 def get_vector_store() -> VectorStorePort:
-    """Vector store singleton — Qdrant in normal operation, in-memory for tests."""
+    """Vector store singleton - Qdrant in normal operation, in-memory for tests."""
     global _store
     if _store is None:
         from app.core.config import get_settings

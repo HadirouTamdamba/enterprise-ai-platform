@@ -66,7 +66,7 @@ export default function AgentsPage() {
                 }`}
               >
                 <p className="font-medium">{agent.role}</p>
-                <p className="mt-1 text-xs text-zinc-500">{agent.description}…</p>
+                <p className="mt-1 text-xs text-zinc-500">{agent.description}...</p>
               </button>
             ))}
           </div>
@@ -78,7 +78,7 @@ export default function AgentsPage() {
               rows={4}
               value={task}
               onChange={(e) => setTask(e.target.value)}
-              placeholder={`Give the ${selected} agent a task…`}
+              placeholder={`Give the ${selected} agent a task...`}
             />
             <label className="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
               <input
@@ -89,11 +89,11 @@ export default function AgentsPage() {
               Reflection pass (higher quality, ~2× slower)
             </label>
             <Button onClick={() => execute.mutate()} disabled={task.length < 3 || execute.isPending}>
-              {execute.isPending ? `Agent working… ${elapsed}s` : `Run ${selected}`}
+              {execute.isPending ? `Agent working... ${elapsed}s` : `Run ${selected}`}
             </Button>
             {execute.isPending && (
               <p className="text-xs text-zinc-500">
-                Local models (Ollama) take 30s–3min per run — the full execution trace
+                Local models (Ollama) take 30s-3min per run - the full execution trace
                 appears when the agent finishes.
               </p>
             )}
@@ -106,7 +106,7 @@ export default function AgentsPage() {
 
       {run && (
         <Card
-          title={`Result — ${run.agent}`}
+          title={`Result - ${run.agent}`}
           actions={
             <div className="flex gap-2">
               <Badge>{run.usage.total_tokens} tokens</Badge>
@@ -124,7 +124,7 @@ export default function AgentsPage() {
               <ol className="mt-2 space-y-2 text-xs text-zinc-600 dark:text-zinc-400">
                 {run.steps.map((s) => (
                   <li key={s.iteration} className="rounded bg-zinc-50 p-2 dark:bg-zinc-800/50">
-                    <span className="font-semibold">#{s.iteration} {s.action}</span> — {s.thought}
+                    <span className="font-semibold">#{s.iteration} {s.action}</span> - {s.thought}
                     <br />
                     <span className="text-zinc-500">{s.result}</span>
                   </li>

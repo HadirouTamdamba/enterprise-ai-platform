@@ -16,4 +16,4 @@ port; the gateway service applies routing policy, retries, fallback, caching and
 ## Consequences
 + Adding a provider = one adapter file + config entry; zero business-logic change.
 + Deterministic tests via a `FakeLLMProvider` adapter.
-− Lowest-common-denominator features must be normalized (e.g., tool-call formats) in adapters.
+- Lowest-common-denominator features must be normalized (e.g., tool-call formats) in adapters.

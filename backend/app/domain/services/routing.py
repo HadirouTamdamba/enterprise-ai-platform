@@ -1,6 +1,6 @@
-"""Model routing policy — pure business rules, no I/O.
+"""Model routing policy - pure business rules, no I/O.
 
-Resolution order: explicit request → project defaults → platform defaults,
+Resolution order: explicit request -> project defaults -> platform defaults,
 then a fallback chain for resilience when a provider fails.
 """
 

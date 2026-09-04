@@ -1,4 +1,4 @@
-# Enterprise AI Platform — AWS reference infrastructure
+# Enterprise AI Platform - AWS reference infrastructure
 # Cloud-agnostic layout: swap the module sources for Azure/GCP equivalents;
 # the Kubernetes manifests in ../kubernetes are cloud-independent.
 

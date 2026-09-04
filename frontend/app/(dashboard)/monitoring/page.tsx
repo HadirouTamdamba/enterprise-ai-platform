@@ -24,7 +24,7 @@ export default function MonitoringPage() {
       <div>
         <h1 className="text-2xl font-bold">Monitoring Center</h1>
         <p className="text-sm text-zinc-500">
-          AI usage, cost and latency — 30 days. Infrastructure metrics live in Grafana (:3001)
+          AI usage, cost and latency - 30 days. Infrastructure metrics live in Grafana (:3001)
         </p>
       </div>
 

@@ -11,17 +11,17 @@ make dev-frontend   # next dev :3000
 make test lint      # before every commit (pre-commit hooks: pre-commit install)
 ```
 
-Tests are hermetic (SQLite, fake LLM, local embeddings, in-memory vectors) — no Docker needed
+Tests are hermetic (SQLite, fake LLM, local embeddings, in-memory vectors) - no Docker needed
 for `make test-backend`.
 
 ## Architecture rules (enforced in review)
 
-- Dependency direction: `api → application → domain ← infrastructure/ai`.
+- Dependency direction: `api -> application -> domain <- infrastructure/ai`.
 - The **domain** layer never imports FastAPI, SQLAlchemy, Redis or any LLM SDK.
 - Routes validate + delegate; business rules live in domain entities/services.
-- All config through `app/core/config.py` (Pydantic Settings) — never `os.environ` directly.
+- All config through `app/core/config.py` (Pydantic Settings) - never `os.environ` directly.
 - Raise typed exceptions from `app/core/exceptions.py`; the API layer maps them.
-- No `print()` — use `get_logger(__name__)` (structured JSON with request context).
+- No `print()` - use `get_logger(__name__)` (structured JSON with request context).
 - Prompts belong in `prompts/*.yaml` or the Prompt Registry, never inline in code.
 
 ## Adding an LLM provider

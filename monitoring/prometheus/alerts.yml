@@ -22,21 +22,21 @@ groups:
         for: 10m
         labels: { severity: warning }
         annotations:
-          summary: "LLM provider failures detected — check fallback chain and provider status"
+          summary: "LLM provider failures detected - check fallback chain and provider status"
 
       - alert: LLMCostSpike
         expr: sum(increase(eap_llm_cost_usd_total[1h])) > 50
         for: 5m
         labels: { severity: warning }
         annotations:
-          summary: "LLM spend above $50 in the last hour — investigate usage"
+          summary: "LLM spend above $50 in the last hour - investigate usage"
 
       - alert: GuardrailBlocksSpike
         expr: sum(increase(eap_guardrail_blocks_total{guardrail="prompt_injection"}[15m])) > 20
         for: 5m
         labels: { severity: warning }
         annotations:
-          summary: "Prompt-injection attempts spiking — possible attack in progress"
+          summary: "Prompt-injection attempts spiking - possible attack in progress"
 
       - alert: IngestionFailures
         expr: increase(eap_documents_indexed_total{status="failed"}[30m]) > 5

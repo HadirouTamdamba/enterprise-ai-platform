@@ -44,7 +44,7 @@ class LocalHashEmbeddings(EmbeddingProviderPort):
     """Deterministic, dependency-free embeddings.
 
     DEGRADED MODE ONLY: enables keyless demos and offline tests. Vectors capture
-    token-level lexical similarity, not semantics — production deployments must
+    token-level lexical similarity, not semantics - production deployments must
     configure a real embedding provider.
     """
 

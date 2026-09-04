@@ -53,7 +53,7 @@ export default function PlaygroundPage() {
       <div>
         <h1 className="text-2xl font-bold">Prompt Playground</h1>
         <p className="text-sm text-zinc-500">
-          Test any prompt against any configured provider — cost and latency included
+          Test any prompt against any configured provider - cost and latency included
         </p>
       </div>
 
@@ -106,11 +106,11 @@ export default function PlaygroundPage() {
                 rows={4}
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
-                placeholder="Write your prompt…"
+                placeholder="Write your prompt..."
               />
             </div>
             <Button onClick={() => run.mutate()} disabled={!prompt || run.isPending}>
-              {run.isPending ? "Running…" : "Run"}
+              {run.isPending ? "Running..." : "Run"}
             </Button>
             {run.isError && (
               <p className="text-sm text-red-600">{(run.error as Error).message}</p>

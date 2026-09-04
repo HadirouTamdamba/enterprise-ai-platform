@@ -1,4 +1,4 @@
-# Enterprise AI Platform — developer entrypoints
+# Enterprise AI Platform - developer entrypoints
 
 .PHONY: help install up up-deps down logs dev-backend dev-frontend test test-backend \
         test-frontend lint format migrate seed evaluate clean

@@ -20,7 +20,7 @@ async def main() -> int:
     }
     report["passed"] = all(section["passed"] for section in
                            (report["rag"], report["prompts_guardrails"], report["agents"]))
-    print(json.dumps(report, indent=2))  # noqa: T201 — CLI entrypoint
+    print(json.dumps(report, indent=2))  # noqa: T201 - CLI entrypoint
     return 0 if report["passed"] else 1
 
 

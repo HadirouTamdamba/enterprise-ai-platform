@@ -44,7 +44,7 @@ async def test_gateway_returns_response_with_usage(registry):
 
 async def test_gateway_falls_back_when_primary_fails(registry, monkeypatch):
     gateway = LLMGatewayService(registry)
-    # Primary broken, fallback fake — resolve manually to control the chain.
+    # Primary broken, fallback fake - resolve manually to control the chain.
     from app.domain.services.routing import ModelTarget, RoutingDecision
 
     route = RoutingDecision(

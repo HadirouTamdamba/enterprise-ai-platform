@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""End-to-end API walkthrough: login → project → knowledge base → upload → RAG query.
+"""End-to-end API walkthrough: login -> project -> knowledge base -> upload -> RAG query.
 
 Requires the Docker Compose stack (make up) and httpx: pip install httpx
 """
@@ -38,12 +38,12 @@ def main() -> int:
     # 1. Authenticate
     tokens = client.post("/auth/login", data=ADMIN).raise_for_status().json()
     client.headers["Authorization"] = f"Bearer {tokens['access_token']}"
-    print("✓ authenticated")
+    print("[OK] authenticated")
 
     # 2. Reuse the seeded workspace/project
     projects = client.get("/projects").raise_for_status().json()
     project = projects[0]
-    print(f"✓ project: {project['name']}")
+    print(f"[OK] project: {project['name']}")
 
     # 3. Create a knowledge base
     kb = client.post(
@@ -63,7 +63,7 @@ def main() -> int:
         )
     else:
         kb_id = kb.raise_for_status().json()["id"]
-    print(f"✓ knowledge base: {kb_id}")
+    print(f"[OK] knowledge base: {kb_id}")
 
     # 4. Upload a document (ingestion runs async via Celery)
     content = (
@@ -74,7 +74,7 @@ def main() -> int:
         f"/rag/knowledge-bases/{kb_id}/documents",
         files={"file": ("policy.txt", io.BytesIO(content), "text/plain")},
     ).raise_for_status().json()
-    print(f"✓ uploaded: {doc['filename']} (status: {doc['status']})")
+    print(f"[OK] uploaded: {doc['filename']} (status: {doc['status']})")
 
     # 5. Ask a grounded question
     answer = client.post(

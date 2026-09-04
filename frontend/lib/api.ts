@@ -58,7 +58,7 @@ export async function api<T>(
     if (await tryRefresh()) {
       return api<T>(path, options, true);
     }
-    // Session is no longer recoverable — send the user back to login.
+    // Session is no longer recoverable - send the user back to login.
     clearTokens();
     if (typeof window !== "undefined" && !window.location.pathname.startsWith("/login")) {
       window.location.href = "/login";

@@ -25,7 +25,7 @@ class RateLimiter:
                 pipe.expire(key, window_seconds)
                 results = await pipe.execute()
                 return int(results[2]) <= limit
-            except Exception:  # Redis down → fail open, don't take the API down
+            except Exception:  # Redis down -> fail open, don't take the API down
                 return True
         window = self._memory.setdefault(key, [])
         window[:] = [t for t in window if t > now - window_seconds]

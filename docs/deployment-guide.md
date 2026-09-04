@@ -7,7 +7,7 @@ git clone https://github.com/HadirouTamdamba/enterprise-ai-platform.git
 cd enterprise-ai-platform
 cp .env.example .env
 # Edit .env: set SECRET_KEY (openssl rand -hex 32), ADMIN_PASSWORD,
-# and at least one LLM provider API key (ANTHROPIC_API_KEY, OPENAI_API_KEY, …)
+# and at least one LLM provider API key (ANTHROPIC_API_KEY, OPENAI_API_KEY, ...)
 docker compose up -d --build
 ```
 
@@ -15,7 +15,7 @@ The `seed` service creates the schema, admin user, and a default org/workspace/p
 first start. Services: frontend :3000 · API :8000 (`/api/v1/docs`) · NGINX edge :8080 ·
 Grafana :3001 · Prometheus :9090 · Qdrant :6333 · MLflow :5000.
 
-Verify: `curl http://localhost:8000/api/v1/health/ready` → `{"status":"ready",…}`, then
+Verify: `curl http://localhost:8000/api/v1/health/ready` -> `{"status":"ready",...}`, then
 run `python examples/api_usage.py` for an end-to-end smoke test.
 
 ## 2. Kubernetes (production)
@@ -24,7 +24,7 @@ Prereqs: cluster ≥1.29, ingress-nginx, cert-manager, a StorageClass with RWX s
 (for the uploads PVC), images published by the `docker.yml` workflow.
 
 ```bash
-# 1. Real secrets — never apply the template in config.yaml
+# 1. Real secrets - never apply the template in config.yaml
 kubectl create namespace eap
 kubectl create secret generic eap-secrets -n eap \
   --from-literal=SECRET_KEY=$(openssl rand -hex 32) \
@@ -64,7 +64,7 @@ Outputs include the EKS endpoint, RDS endpoint (wire into `eap-config`) and ECR 
 
 ## 4. CI/CD deployment
 
-`Actions → Deploy → Run workflow` with `staging` or `production`. The GitHub environment
+`Actions -> Deploy -> Run workflow` with `staging` or `production`. The GitHub environment
 holds `KUBECONFIG_B64` and enforces reviewer approval for production. The workflow applies
 manifests, waits for rollout, and smoke-tests `/health/ready`.
 

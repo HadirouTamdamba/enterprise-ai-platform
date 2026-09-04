@@ -1,8 +1,8 @@
-"""Agent orchestrator (F-30..F-34): plan → act → reflect with hard budget guards.
+"""Agent orchestrator (F-30..F-34): plan -> act -> reflect with hard budget guards.
 
 Agents are declarative specs (role, system prompt, tools, limits). Tools are typed,
 validated, and every execution is logged. The loop stops on final answer, max
-iterations, or cost ceiling — whichever comes first.
+iterations, or cost ceiling - whichever comes first.
 """
 
 import json
@@ -69,11 +69,11 @@ Available tools:
 Rules:
 - Use "final" with your complete answer in "input" when the task is done.
 - The final "input" is shown to a business user: write it as well-structured prose or
-  markdown IN THE LANGUAGE OF THE TASK — never as raw JSON data, unless the task
+  markdown IN THE LANGUAGE OF THE TASK - never as raw JSON data, unless the task
   explicitly asks for JSON.
 - Never invent tool names. Validate your JSON. Emit exactly ONE JSON object per step.
 - Never repeat a tool call you already made with the same or similar input.
-- Be efficient: every step costs money — finish as soon as the task is solved."""
+- Be efficient: every step costs money - finish as soon as the task is solved."""
 
 
 class AgentOrchestrator:
@@ -95,13 +95,13 @@ class AgentOrchestrator:
         budget = min(max_cost_usd or spec.max_cost_usd, 50.0)
 
         if not spec.tools:
-            # No tools → the plan/act JSON protocol is pure overhead (and small
+            # No tools -> the plan/act JSON protocol is pure overhead (and small
             # models leak it into their answers). Answer directly in one call.
             return await self._direct_answer(spec, task, user_id=user_id, project_id=project_id)
 
         tool_index = {tool.name: tool for tool in spec.tools}
         tools_doc = "\n".join(
-            f"- {t.name}: {t.description} — parameters: {json.dumps(t.parameters)}"
+            f"- {t.name}: {t.description} - parameters: {json.dumps(t.parameters)}"
             for t in spec.tools
         ) or "- (no tools; reason and answer directly)"
 
@@ -137,12 +137,12 @@ class AgentOrchestrator:
             step_data = _parse_step(response.content)
             thought = step_data.get("thought", "")
             action = str(step_data.get("action", "final")).strip().lower()
-            # Small models express "no tool needed" in many ways — all mean final.
+            # Small models express "no tool needed" in many ways - all mean final.
             if action in ("", "none", "null", "no_action", "answer", "respond", "done"):
                 action = "final"
 
             if action != "final" and action not in tool_index:
-                # Unknown action → correct the model and let it retry within budget.
+                # Unknown action -> correct the model and let it retry within budget.
                 logger.warning("agent_unknown_tool", agent=spec.name, action=action)
                 valid = ", ".join(tool_index) or "(none)"
                 messages.append(ChatMessage(role=MessageRole.ASSISTANT, content=response.content))
@@ -189,7 +189,7 @@ class AgentOrchestrator:
                 )
                 break
         else:
-            # Iterations exhausted without a final answer — force one synthesis turn
+            # Iterations exhausted without a final answer - force one synthesis turn
             # so the caller always receives a usable conclusion.
             messages.append(
                 ChatMessage(
@@ -205,7 +205,7 @@ class AgentOrchestrator:
             )
             result.prompt_tokens += response.usage.prompt_tokens
             result.completion_tokens += response.usage.completion_tokens
-            # The model may still answer in protocol JSON — unwrap it for the user.
+            # The model may still answer in protocol JSON - unwrap it for the user.
             final_data = _parse_step(response.content)
             unwrapped = final_data.get("input") or final_data.get("thought") or response.content
             result.output = (

@@ -1,4 +1,4 @@
-"""Load test profile (Locust) — run against a staging deployment, never production.
+"""Load test profile (Locust) - run against a staging deployment, never production.
 
 Usage:
     pip install locust

@@ -1,7 +1,7 @@
 """Shared fixtures: in-memory SQLite DB, test settings, authenticated clients.
 
 The test environment uses the Fake LLM provider, local embeddings and the
-in-memory vector store — the full stack runs deterministically with no network.
+in-memory vector store - the full stack runs deterministically with no network.
 """
 
 import os

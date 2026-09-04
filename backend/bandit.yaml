@@ -1,5 +1,5 @@
 # B105: flags the JWT token-type literals ("access"/"refresh") as hardcoded
-# passwords — a known false-positive class; no credentials are hardcoded.
+# passwords - a known false-positive class; no credentials are hardcoded.
 skips: [B105]
 exclude_dirs:
   - tests

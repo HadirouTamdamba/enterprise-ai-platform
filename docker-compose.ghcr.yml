@@ -1,5 +1,5 @@
 # Overlay that runs the PUBLISHED images from GitHub Container Registry instead of
-# building them locally — the "nothing to build" fast path. The images are public
+# building them locally - the "nothing to build" fast path. The images are public
 # and multi-architecture (linux/amd64 + linux/arm64), so they run natively on
 # Intel/AMD and on Apple Silicon.
 #

@@ -87,7 +87,7 @@ export default function DashboardPage() {
             ))}
             {providers.data?.configured.length === 0 && (
               <p className="text-sm text-zinc-500">
-                No provider configured — add an API key in .env
+                No provider configured - add an API key in .env
               </p>
             )}
           </div>

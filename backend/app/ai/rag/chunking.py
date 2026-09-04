@@ -1,4 +1,4 @@
-"""Configurable chunking strategies (F-22). Pure functions — easy to test and extend."""
+"""Configurable chunking strategies (F-22). Pure functions - easy to test and extend."""
 
 import re
 from dataclasses import dataclass, field

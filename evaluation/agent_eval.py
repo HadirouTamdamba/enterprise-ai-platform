@@ -65,5 +65,5 @@ async def evaluate() -> dict:
 
 if __name__ == "__main__":
     result = asyncio.run(evaluate())
-    print(json.dumps(result, indent=2))  # noqa: T201 — CLI entrypoint
+    print(json.dumps(result, indent=2))  # noqa: T201 - CLI entrypoint
     sys.exit(0 if result["passed"] else 1)

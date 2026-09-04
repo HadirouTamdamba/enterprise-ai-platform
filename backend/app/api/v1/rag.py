@@ -91,7 +91,7 @@ async def upload_document(
     actor: CurrentUser,
     settings: AppSettings,
 ) -> DocumentResponse:
-    """Secure upload → async ingestion via Celery (202 Accepted)."""
+    """Secure upload -> async ingestion via Celery (202 Accepted)."""
     kb = await KnowledgeBaseRepository(session).get(kb_id)
     filename = Path(file.filename or "upload").name  # strip any path components
     extension = Path(filename).suffix.lower()
@@ -132,7 +132,7 @@ async def upload_document(
     await session.commit()
 
     if settings.environment == "test":
-        # Synchronous ingestion in tests — no broker available.
+        # Synchronous ingestion in tests - no broker available.
         rag = _rag_service(session)
         try:
             document.chunk_count = await rag.ingest_document(document, kb)

@@ -1,6 +1,6 @@
 # Enterprise AI Platform (EAP)
 
-> A production-grade, self-hosted platform to **design, build, deploy, monitor and govern AI applications at scale** — RAG, AI Agents, LLMOps, MLOps and AI Governance in a single, provider-agnostic control plane.
+> A production-grade, self-hosted platform to **design, build, deploy, monitor and govern AI applications at scale** - RAG, AI Agents, LLMOps, MLOps and AI Governance in a single, provider-agnostic control plane.
 
 [![CI](https://github.com/HadirouTamdamba/enterprise-ai-platform/actions/workflows/ci.yml/badge.svg)](https://github.com/HadirouTamdamba/enterprise-ai-platform/actions/workflows/ci.yml)
 [![Docker Images](https://github.com/HadirouTamdamba/enterprise-ai-platform/actions/workflows/docker.yml/badge.svg)](https://github.com/HadirouTamdamba/enterprise-ai-platform/actions/workflows/docker.yml)
@@ -9,7 +9,7 @@
 ![Next.js](https://img.shields.io/badge/Next.js-15-black)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-**Container images** (public on GitHub Container Registry — no login required):
+**Container images** (public on GitHub Container Registry - no login required):
 
 [![backend](https://img.shields.io/badge/ghcr.io-eap--backend-2496ED?logo=docker&logoColor=white)](https://github.com/HadirouTamdamba/enterprise-ai-platform/pkgs/container/eap-backend)
 [![worker](https://img.shields.io/badge/ghcr.io-eap--worker-2496ED?logo=docker&logoColor=white)](https://github.com/HadirouTamdamba/enterprise-ai-platform/pkgs/container/eap-worker)
@@ -33,18 +33,18 @@ Enterprises (banks, insurers, hospitals, energy, government, manufacturing) want
 | No cost visibility | **Token & cost tracking** per request, user, project, model |
 | Ungoverned AI usage | **Governance Center**: model cards, risk register, approval workflows, audit logs |
 | Untrusted answers | **Enterprise RAG** with hybrid search, re-ranking, citations, groundedness evaluation |
-| Vendor lock-in | Hexagonal architecture — every provider is a replaceable adapter |
+| Vendor lock-in | Hexagonal architecture - every provider is a replaceable adapter |
 | No production monitoring | Prometheus / Grafana / Loki / OpenTelemetry built in |
 
 ## Core capabilities
 
-- **LLM Gateway** — provider routing (Claude, GPT, Gemini, Mistral, Llama, DeepSeek, Ollama, OpenRouter, Azure OpenAI, AWS Bedrock, Vertex AI), fallback chains, retries, streaming, structured outputs, tool calling, semantic caching, rate limiting, cost/token accounting.
-- **RAG Studio** — ingestion (PDF, DOCX, PPTX, XLSX, MD, CSV, JSON, HTML, images/OCR), configurable chunking (semantic/recursive/markdown/fixed), multi-provider embeddings, Qdrant vector store, hybrid search + metadata filtering, re-ranking, citation engine, feedback loop, document versioning.
-- **Agent Orchestrator** — specialized agents (Planner, Research, Retriever, Compliance, Security, Developer, Documentation, Reviewer, Critic, Reporting) with tools, memory, planning, reflection and evaluation.
-- **LLMOps** — prompt registry with versioning, prompt testing & evaluation, conversation memory, context compression, guardrails (prompt injection, PII, toxicity, hallucination detection), cost & latency analytics.
-- **MLOps** — experiment tracking, dataset versioning, model registry, deployment strategies (shadow/canary), drift detection, retraining hooks, rollback.
-- **Governance** — model cards, prompt cards, dataset cards, AI inventory, risk register, human approval workflow, compliance dashboard (GDPR, EU AI Act, DORA, ISO 42001 ready), immutable audit trail.
-- **Enterprise foundation** — OAuth2/JWT auth, RBAC, organizations → workspaces → projects hierarchy, multi-tenancy, structured JSON logging, OpenTelemetry tracing, health/readiness probes.
+- **LLM Gateway** - provider routing (Claude, GPT, Gemini, Mistral, Llama, DeepSeek, Ollama, OpenRouter, Azure OpenAI, AWS Bedrock, Vertex AI), fallback chains, retries, streaming, structured outputs, tool calling, semantic caching, rate limiting, cost/token accounting.
+- **RAG Studio** - ingestion (PDF, DOCX, PPTX, XLSX, MD, CSV, JSON, HTML, images/OCR), configurable chunking (semantic/recursive/markdown/fixed), multi-provider embeddings, Qdrant vector store, hybrid search + metadata filtering, re-ranking, citation engine, feedback loop, document versioning.
+- **Agent Orchestrator** - specialized agents (Planner, Research, Retriever, Compliance, Security, Developer, Documentation, Reviewer, Critic, Reporting) with tools, memory, planning, reflection and evaluation.
+- **LLMOps** - prompt registry with versioning, prompt testing & evaluation, conversation memory, context compression, guardrails (prompt injection, PII, toxicity, hallucination detection), cost & latency analytics.
+- **MLOps** - experiment tracking, dataset versioning, model registry, deployment strategies (shadow/canary), drift detection, retraining hooks, rollback.
+- **Governance** - model cards, prompt cards, dataset cards, AI inventory, risk register, human approval workflow, compliance dashboard (GDPR, EU AI Act, DORA, ISO 42001 ready), immutable audit trail.
+- **Enterprise foundation** - OAuth2/JWT auth, RBAC, organizations -> workspaces -> projects hierarchy, multi-tenancy, structured JSON logging, OpenTelemetry tracing, health/readiness probes.
 
 ## Architecture at a glance
 
@@ -61,18 +61,18 @@ Enterprises (banks, insurers, hospitals, energy, government, manufacturing) want
 └───┬──────────┬──────────┬──────────┬──────────┬──────────┬─────────────────┘
     │          │          │          │          │          │
 PostgreSQL   Redis     Qdrant     Celery    MLflow    LLM Providers
-(state)    (cache/RL) (vectors)  (workers) (registry) (Claude/GPT/…)
+(state)    (cache/RL) (vectors)  (workers) (registry) (Claude/GPT/...)
                                    Observability: Prometheus · Grafana · Loki · OTel
 ```
 
-Full architecture: [docs/03-architecture.md](docs/03-architecture.md) — decisions: [docs/adr/](docs/adr/)
+Full architecture: [docs/03-architecture.md](docs/03-architecture.md) - decisions: [docs/adr/](docs/adr/)
 
 ## Quick start (Docker Compose)
 
 The platform is a multi-service stack (API, worker, frontend + PostgreSQL, Redis,
 Qdrant, monitoring), so it runs via Docker Compose. Pick one of two paths.
 
-### Option 1 — Build locally (for development)
+### Option 1 - Build locally (for development)
 
 ```bash
 git clone https://github.com/HadirouTamdamba/enterprise-ai-platform.git
@@ -81,10 +81,10 @@ cp .env.example .env          # add at least one LLM provider API key
 make up                        # builds & starts the full stack
 ```
 
-### Option 2 — Run the published images (fastest, nothing to build)
+### Option 2 - Run the published images (fastest, nothing to build)
 
 The application images (`eap-backend`, `eap-worker`, `eap-frontend`) are published
-publicly to GitHub Container Registry — no login required. They are
+publicly to GitHub Container Registry - no login required. They are
 **multi-architecture** (`linux/amd64` + `linux/arm64`), so they run natively on
 Intel/AMD machines and on Apple Silicon. The overlay pulls them instead of building:
 
@@ -104,7 +104,7 @@ docker compose -f docker-compose.yml -f docker-compose.ghcr.yml up -d
 
 Pin a specific version with `EAP_IMAGE_TAG` (e.g. `EAP_IMAGE_TAG=sha-1a2b3c4 make up-ghcr`).
 
-> The repo checkout is still required either way — the infrastructure services mount
+> The repo checkout is still required either way - the infrastructure services mount
 > their config from `monitoring/`, `infrastructure/nginx/` and `.env`.
 
 ### Services
@@ -135,7 +135,7 @@ make lint          # ruff + mypy + eslint
 With the stack running (`make up`), these populate the platform with realistic content:
 
 ```bash
-# End-to-end walkthrough: auth → gateway → RAG (cited) → agent → governance gate → cost analytics
+# End-to-end walkthrough: auth -> gateway -> RAG (cited) -> agent -> governance gate -> cost analytics
 python scripts/run_demo.py
 
 # Seed MLflow with a fraud-scoring experiment (3 tracked runs + registered model)
@@ -190,4 +190,4 @@ OAuth2 + JWT (access/refresh), RBAC (platform/org/workspace scopes), secrets via
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT - see [LICENSE](LICENSE).

@@ -1,4 +1,4 @@
-"""Model pricing table — configuration, not code logic.
+"""Model pricing table - configuration, not code logic.
 
 USD per 1M tokens: model -> (input, output). Loaded from an optional JSON override
 file so operators can update prices without a release.

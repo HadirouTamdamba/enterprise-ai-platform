@@ -8,7 +8,7 @@ that demonstrates the platform's MLOps story (experiment tracking, model registr
 alongside the LLMOps features shown elsewhere.
 
 Usage:  backend/.venv/bin/python scripts/seed_mlflow_demo.py
-        (MLflow reachable at http://localhost:5001 — see docker-compose)
+        (MLflow reachable at http://localhost:5001 - see docker-compose)
 """
 
 import os
@@ -82,8 +82,8 @@ def main() -> int:
 
     # Register the best run in the MLflow Model Registry.
     result = mlflow.register_model(f"runs:/{best['run_id']}/model", "fraud-scoring")
-    print(f"\n✓ Best AUC={best['auc']:.3f} → registered 'fraud-scoring' v{result.version}")
-    print(f"✓ MLflow UI: {TRACKING_URI} → experiment '{EXPERIMENT}'")
+    print(f"\n[OK] Best AUC={best['auc']:.3f} -> registered 'fraud-scoring' v{result.version}")
+    print(f"[OK] MLflow UI: {TRACKING_URI} -> experiment '{EXPERIMENT}'")
     return 0
 
 

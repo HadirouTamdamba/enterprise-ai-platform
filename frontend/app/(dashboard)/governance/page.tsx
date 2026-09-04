@@ -112,7 +112,7 @@ export default function GovernancePage() {
               {approvals.data!.map((a) => (
                 <li key={a.id} className="rounded-lg border border-zinc-200 p-3 text-sm dark:border-zinc-800">
                   <p className="font-medium">
-                    {a.resource_type} — {a.resource_id.slice(0, 8)}
+                    {a.resource_type} - {a.resource_id.slice(0, 8)}
                   </p>
                   <p className="mt-1 text-xs text-zinc-500">{a.justification || "No justification"}</p>
                   <div className="mt-2 flex gap-2">
@@ -137,7 +137,7 @@ export default function GovernancePage() {
                   <span className="font-medium">{e.action}</span>
                   <span className="ml-2 text-zinc-500">{e.resource_type}</span>
                 </span>
-                <span className="font-mono text-zinc-400">{e.entry_hash.slice(0, 10)}…</span>
+                <span className="font-mono text-zinc-400">{e.entry_hash.slice(0, 10)}...</span>
               </li>
             ))}
           </ul>

@@ -1,4 +1,4 @@
-"""Provider registry — builds every configured adapter from settings.
+"""Provider registry - builds every configured adapter from settings.
 
 Adding a provider = one entry here + config. Business logic never imports adapters.
 """

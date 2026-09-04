@@ -29,7 +29,7 @@ _RAG_SYSTEM_PROMPT = """You are an enterprise knowledge assistant.
 Answer the user's question using ONLY the numbered context passages below.
 Rules:
 - Cite passages inline as [1], [2] matching the passage numbers you used.
-- If the context does not contain the answer, say so explicitly — never invent facts.
+- If the context does not contain the answer, say so explicitly - never invent facts.
 - Be concise and factual.
 - Answer STRICTLY in the same language as the question (French question -> French answer).
 
@@ -51,7 +51,7 @@ class RAGService:
     async def ingest_document(
         self, document: DocumentModel, kb: KnowledgeBaseModel
     ) -> int:
-        """Parse → chunk → embed → index. Returns the number of chunks indexed.
+        """Parse -> chunk -> embed -> index. Returns the number of chunks indexed.
 
         Idempotent per (document, version): previous vectors for the same
         filename are removed first (document versioning / knowledge refresh).

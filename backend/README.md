@@ -1,4 +1,4 @@
-# Enterprise AI Platform — Backend
+# Enterprise AI Platform - Backend
 
 FastAPI backend implementing the platform's hexagonal core: identity & tenancy, LLM gateway,
 RAG engine, agent orchestrator, governance and monitoring APIs.
